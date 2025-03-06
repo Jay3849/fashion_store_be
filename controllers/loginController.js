@@ -25,9 +25,7 @@ async function login(req, res) {
     if (!findUser) {
       throw Error("Invalid Credentials");
     }
-    jwt.verify(findUser.password, "jay");
     findUser.password = null;
-    console.log(typeof findUser);
     const { email, name, _id } = findUser;
     res.status(200).json({
       token: jwt.sign({ email, name, _id }, "admin"),

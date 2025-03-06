@@ -79,7 +79,7 @@ async function getall(req, res) {
       options.skip = (+page - 1) * (per_page || options.limit);
       options.limit = +(per_page || options.limit);
     }
-    console.log(page, options);
+
     const getall = await ProductModel.find({}, null, options);
 
     if (!getall) {
