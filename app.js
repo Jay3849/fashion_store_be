@@ -11,6 +11,6 @@ app.use(cors());
 app.use("/api", [loginrouter, productRoute]);
 
 app.listen(3000, async () => {
-  console.log(`server running on 3000`);
+  console.log(`server running on http://localhost:3000`);
   await dbConnection();
 });
