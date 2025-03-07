@@ -4,7 +4,7 @@ const authMiddleware = async (req, res, next) => {
   try {
     const token = req.headers?.authorization?.replace("Bearer ", "");
     if (!token) {
-      throw Error();
+      throw Error("access denied");
     }
     const user = jwt.verify(token, "admin");
     req.user = user;
