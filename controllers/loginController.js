@@ -23,9 +23,16 @@ async function login(req, res) {
     let loginData = loginValidator(req.body);
     const findUser = await UserModel.findOne({ email: loginData.email });
     if (!findUser) {
-      throw Error("Invalid Credentials");
+      throw Error("Invalid email ");
     }
-    findUser.password = null;
+    console.log(loginData?.password, findUser.password);
+    // if (loginData?.email !== findUser.email) {
+    //   throw Error("invalid email ");
+    // }
+    const authUserPass = jwt.verify(findUser.password, "jay");
+    if (loginData?.password !== authUserPass) {
+      throw Error("Invalid password");
+    }
     const { email, name, _id } = findUser;
     res.status(200).json({
       token: jwt.sign({ email, name, _id }, "admin"),
@@ -33,7 +40,9 @@ async function login(req, res) {
     });
   } catch (error) {
     console.error(error.message);
-    res.status(400).json({ msg: error?.message || "Invalid Data" });
+    res.status(400).json({
+      msg: error?.message || "Invalid Data please register after login",
+    });
   }
 }
 

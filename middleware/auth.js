@@ -6,8 +6,10 @@ const authMiddleware = async (req, res, next) => {
     if (!token) {
       throw Error("access denied");
     }
+    console.log(token);
     const user = jwt.verify(token, "admin");
     req.user = user;
+
     next();
   } catch (error) {
     res.status(403).json(error.message || "unathorized access");
