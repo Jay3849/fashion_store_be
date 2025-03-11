@@ -73,8 +73,8 @@ async function getOne(req, res) {
 
 async function getall(req, res) {
   try {
-    const options = { limit: 2, skip: 0 };
     const { page, per_page } = req.query;
+    const options = { limit:per_page?? 10, skip: 0 };
     if (+page > 1) {
       options.skip = (+page - 1) * (per_page || options.limit);
       options.limit = +(per_page || options.limit);
