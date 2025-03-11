@@ -40,13 +40,6 @@ const productValidator = async (data) => {
   }
   if (tags && Array.isArray(tags)) {
     for (const tag of tags) {
-      // {
-      //     type: String,
-      //     label: String,
-      //     bgColor: String,
-      //     textColor: String,
-      //   },
-
       if (!tag.type || !tag.label) {
         throw new Error("require tags details!!");
       }

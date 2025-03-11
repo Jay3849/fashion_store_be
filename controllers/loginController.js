@@ -26,9 +26,7 @@ async function login(req, res) {
       throw Error("Invalid email ");
     }
     console.log(loginData?.password, findUser.password);
-    // if (loginData?.email !== findUser.email) {
-    //   throw Error("invalid email ");
-    // }
+
     const authUserPass = jwt.verify(findUser.password, "jay");
     if (loginData?.password !== authUserPass) {
       throw Error("Invalid password");
