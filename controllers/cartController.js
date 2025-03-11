@@ -20,6 +20,7 @@ const addToCart = async (req, res) => {
       await cartData.save();
       response = cartData;
     }
+
     res.status(200).json(response);
   } catch (error) {
     console.error(error);
@@ -27,6 +28,32 @@ const addToCart = async (req, res) => {
   }
 };
 
+// /:id
+// producId
+//  user_id =>cart_item_id is present or not
+// find item_id
+// if present  update quantity
+// create cart item  with item id
+
+const getCartProduct = async (req, res) => {
+  try {
+    const populatedCart = await CartModel.findOne({ userId: req.user._id })
+      .populate("items.productId")
+      .populate("userId")
+      .exec();
+
+    if (!populatedCart) {
+      return res.status(404).json({ msg: "Cart not found" });
+    }
+
+    res.status(200).json(populatedCart);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: error?.message || "Error fetching cart" });
+  }
+};
+
 module.exports = {
   addToCart,
+  getCartProduct,
 };
