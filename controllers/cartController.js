@@ -1,5 +1,6 @@
 const CartModel = require("../models/cartModel");
 const cartModel = require("../models/cartModel");
+const ProductModel = require("../models/productModel");
 const { cartValidator } = require("../validators/cartValidator");
 
 const addToCart = async (req, res) => {
@@ -25,6 +26,38 @@ const addToCart = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(400).json({ msg: error?.message || "Invalid product details" });
+  }
+};
+
+const cartProductUpdate = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let findUserCart = await CartModel.findOne({ userId: req.user._id });
+    console.log(id, req.body.quantity);
+    if (findUserCart) {
+      findUserCart = await CartModel.updateOne(
+        { userId: req.user._id, "items.productId": id },
+        { $set: { "items.$.quantity": req.body.quantity } }
+      );
+    } else {
+      findUserCart = await CartModel.create({
+        userId: req.user._id,
+        items: [
+          {
+            productId: id,
+            quantity: req.body.quantity,
+          },
+        ],
+      });
+    }
+    //    if(!product.productId||!product.quantity){
+    //     res.status4(400).json({msg:"productid and quantity are required"})
+    //    }
+
+    //    let cartUpdate=await CartModel.findOne({userId:req.user._id})
+    res.status(200).json(findUserCart);
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -56,4 +89,5 @@ const getCartProduct = async (req, res) => {
 module.exports = {
   addToCart,
   getCartProduct,
+  cartProductUpdate,
 };
