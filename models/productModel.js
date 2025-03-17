@@ -21,7 +21,6 @@ const ProductSchema = mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ProductTypeEnum,
   },
   offer: {
     type: String,

@@ -20,6 +20,18 @@ const cartValidator = async (data) => {
   return data;
 };
 
+const cartUpdateValidator = async ({ id, quantity }) => {
+  if (!id) {
+    throw new Error("Product ID is required.");
+  }
+  if (!quantity || isNaN(+quantity) || +quantity <= 0) {
+    throw new Error("Quantity must be a positive number.");
+  }
+
+  return { id, quantity };
+};
+
 module.exports = {
   cartValidator,
+  cartUpdateValidator,
 };

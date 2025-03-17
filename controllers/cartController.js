@@ -1,8 +1,11 @@
 const CartModel = require("../models/cartModel");
 const cartModel = require("../models/cartModel");
 const ProductModel = require("../models/productModel");
-const { cartValidator } = require("../validators/cartValidator");
-
+const {
+  cartValidator,
+  cartUpdateValidator,
+} = require("../validators/cartValidator");
+const mongoose = require("mongoose");
 const addToCart = async (req, res) => {
   try {
     const cartValidatedData = await cartValidator(req.body);
@@ -32,13 +35,39 @@ const addToCart = async (req, res) => {
 const cartProductUpdate = async (req, res) => {
   try {
     const { id } = req.params;
-    let findUserCart = await CartModel.findOne({ userId: req.user._id });
-    console.log(id, req.body.quantity);
+    const { quantity } = req.body;
+    await cartUpdateValidator({ id, quantity });
+    if (!id || !quantity) {
+      return res.status(400).json({ msg: "product id and quantity required" });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ msg: "Invalid product ID format" });
+    }
+
+    const productExists = await ProductModel.findById(id);
+    if (!productExists) {
+      return res.status(404).json({ msg: "Product not found" });
+    }
+    let findUserCart = await CartModel.findOne({
+      userId: req.user._id,
+    });
     if (findUserCart) {
-      findUserCart = await CartModel.updateOne(
-        { userId: req.user._id, "items.productId": id },
-        { $set: { "items.$.quantity": req.body.quantity } }
-      );
+      const findItem = await CartModel.findOne({
+        userId: req.user._id,
+        "items.productId": id,
+      });
+      if (!findItem) {
+        await CartModel.updateOne({
+          userId: req.user._id,
+          $push: { items: { productId: id, quantity } },
+        });
+      } else {
+        findUserCart = await CartModel.updateOne(
+          { userId: req.user._id, "items.productId": id },
+          { $set: { "items.$.quantity": req.body.quantity } }
+        );
+      }
     } else {
       findUserCart = await CartModel.create({
         userId: req.user._id,
@@ -50,23 +79,12 @@ const cartProductUpdate = async (req, res) => {
         ],
       });
     }
-    //    if(!product.productId||!product.quantity){
-    //     res.status4(400).json({msg:"productid and quantity are required"})
-    //    }
 
-    //    let cartUpdate=await CartModel.findOne({userId:req.user._id})
     res.status(200).json(findUserCart);
   } catch (error) {
     console.log(error);
   }
 };
-
-// /:id
-// producId
-//  user_id =>cart_item_id is present or not
-// find item_id
-// if present  update quantity
-// create cart item  with item id
 
 const getCartProduct = async (req, res) => {
   try {
@@ -86,8 +104,23 @@ const getCartProduct = async (req, res) => {
   }
 };
 
+const cartDeleteProduct = async (req, res) => {
+  try {
+    const { id } = req.ObjectId.CartModel;
+    const remove = await cartModel.deleteOne({ userId: req.user._id });
+
+    if (!remove) {
+      throw Error("Product does not exists");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ msg: error?.message || "cart details empty!!!" });
+  }
+};
+
 module.exports = {
   addToCart,
   getCartProduct,
   cartProductUpdate,
+  cartDeleteProduct,
 };

@@ -28,11 +28,11 @@ const productValidator = async (data) => {
   if (isNaN(+price)) {
     throw new Error("Price must be an integer !");
   }
-  const categoryRegex = ["Men", "women", "kids"];
+  // const categoryRegex = ["Men", "women", "kids"];
 
-  if (!categoryRegex.includes(category)) {
-    throw new Error("not valid category!!");
-  }
+  // if (!categoryRegex.includes(category)) {
+  //   throw new Error("not valid category!!");
+  // }
   const imageRegex = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gim;
 
   if (!imageRegex.test(image)) {
