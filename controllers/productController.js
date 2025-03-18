@@ -73,15 +73,49 @@ async function getOne(req, res) {
 
 async function getall(req, res) {
   try {
-    const { page, per_page } = req.query;
-
+    const { page, per_page, category, type, q } = req.query;
     const options = { limit: per_page ?? 10, skip: 0 };
+    const aggregation = [];
+
     if (+page > 1) {
       options.skip = (+page - 1) * (per_page || options.limit);
       options.limit = +(per_page || options.limit);
     }
+    if (q) {
+      aggregation.push({
+        $match: {
+          $or: [
+            { name: { $regex: q, $options: "i" } },
+            { category: { $regex: q, $options: "i" } },
+            { design: { $regex: q, $options: "i" } },
+            { brand: { $regex: q, $options: "i" } },
+          ],
+        },
+      });
+    }
+    if (type) {
+      aggregation.push({
+        $match: {
+          type,
+        },
+      });
+    }
 
-    const getall = await ProductModel.find({}, null, options);
+    if (category) {
+      aggregation.push({
+        $match: {
+          category,
+        },
+      });
+    }
+
+    aggregation.push(
+      {
+        $skip: options.skip,
+      },
+      { $limit: options.limit }
+    );
+    const getall = await ProductModel.aggregate(aggregation).exec();
 
     if (!getall) {
       throw Error("Products does not exists");

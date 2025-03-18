@@ -4,12 +4,13 @@ const loginrouter = require("./routes/loginRoute");
 const dbConnection = require("./configs/db");
 const productRoute = require("./routes/productRoute");
 const CartRouter = require("./routes/cartRoute");
+const CategoryRouter = require("./routes/categoryRoute");
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
-app.use("/api", [loginrouter, productRoute, CartRouter]);
+app.use("/api", [loginrouter, productRoute, CartRouter, CategoryRouter]);
 
 app.listen(3000, async () => {
   console.log(`server running on http://localhost:3000`);

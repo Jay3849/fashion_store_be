@@ -1,5 +1,4 @@
 const CartModel = require("../models/cartModel");
-const cartModel = require("../models/cartModel");
 const ProductModel = require("../models/productModel");
 const {
   cartValidator,
@@ -106,12 +105,16 @@ const getCartProduct = async (req, res) => {
 
 const cartDeleteProduct = async (req, res) => {
   try {
-    const { id } = req.ObjectId.CartModel;
-    const remove = await cartModel.deleteOne({ userId: req.user._id });
+    const { id } = req.body;
+    const remove = await CartModel.deleteOne({
+      userId: req.user._id,
+      "items.id": id,
+    });
 
     if (!remove) {
       throw Error("Product does not exists");
     }
+    res.status(200).json({ remove, msg: "Item removed from cart" });
   } catch (error) {
     console.error(error);
     res.status(400).json({ msg: error?.message || "cart details empty!!!" });
