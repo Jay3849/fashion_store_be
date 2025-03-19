@@ -74,7 +74,7 @@ async function getOne(req, res) {
 async function getall(req, res) {
   try {
     const { page, per_page, category, type, q } = req.query;
-    const options = { limit: per_page ?? 10, skip: 0 };
+    const options = { limit: per_page ?? 12, skip: 0 };
     const aggregation = [];
 
     if (+page > 1) {
