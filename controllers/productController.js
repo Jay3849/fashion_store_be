@@ -101,10 +101,10 @@ async function getall(req, res) {
       });
     }
 
-    if (category) {
+    if (category && category?.length) {
       aggregation.push({
         $match: {
-          category,
+          category: { $in: category },
         },
       });
     }
@@ -122,7 +122,7 @@ async function getall(req, res) {
     }
     res.status(200).json(getall);
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     res.status(400).json({ msg: error?.message || "producs not available" });
   }
 }
