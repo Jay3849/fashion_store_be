@@ -31,7 +31,7 @@ token: jwt token
 
 # Product
 
-api/product => GET
+/api/product => GET
 
 response:
 {
@@ -40,7 +40,7 @@ all products list per page vise
 
 ---
 
-api/product => POST
+/api/product => POST
 
 payload:
 
@@ -53,12 +53,12 @@ name,category,price,design,image,type,offer,brand,discount,discription,rating,ta
 
 ---
 
-api/product => PUT
+/api/product => PUT
 (product update)
 
 ---
 
-api/product/:id => DELETE
+/api/product/:id => DELETE
 
 response:
 
@@ -71,7 +71,7 @@ response:
 
 # Cart
 
-api/cart => POST
+/api/cart => POST
 
 payload:
 
@@ -86,7 +86,7 @@ cart_id
 
 ---
 
-api/cart/:id => PUT
+/api/cart/:id => PUT
 
 payload:
 {
@@ -96,9 +96,50 @@ productId,quantity //product not yet cart then automatic add this product
 
 ---
 
-api/cart/:id => DELETE
+/api/cart/:id => DELETE
 payload:
 {
 "acknowledged": true,
 "deletedCount": 1
+}
+
+---
+
+# product filtering..
+
+category[Men,Women]
+
+/api/product?type=Men =>GET
+
+response:
+{
+all men types product user can see...
+}
+
+product category check user.....
+
+/api/product?category=T-shirt => GET
+
+response:
+{
+user can get T-shirt typs product
+}
+
+# product Searching
+
+/api/product?q=searching words => GET
+
+response:
+{
+any type seraching user can match then see prodcut then
+not avalible this product..
+}
+
+# product pagination
+
+/api/product?page=1 => GET
+
+response :
+{
+per page user see products...
 }

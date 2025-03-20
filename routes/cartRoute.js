@@ -6,7 +6,7 @@ const {
   cartDeleteProduct,
 } = require("../controllers/cartController");
 const { authMiddleware } = require("../middleware/auth");
-const cart = require;
+// const cart = require;
 
 const CartRouter = Router();
 
