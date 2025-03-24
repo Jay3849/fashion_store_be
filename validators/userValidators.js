@@ -37,4 +37,42 @@ const loginValidator = (data) => {
   };
 };
 
-module.exports = { registerValidator, loginValidator };
+const forgetValidator = (data) => {
+  const { email } = data;
+  if (!email) {
+    throw Error("please Enter Feileds");
+  }
+
+  const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+  if (!emailRegex.test(email)) {
+    throw new Error("Invalid email format");
+  }
+
+  return { email };
+};
+
+const verifyPasswordValidator = async (data) => {
+  let { password, confirmPassword, token } = data;
+  if (!password) {
+    throw Error("please Enter a new password");
+  }
+
+  if (!confirmPassword) {
+    throw Error("please Enter confirm password");
+  }
+  if (!password || !confirmPassword || password !== confirmPassword || !token) {
+    throw Error("password does not match..");
+  }
+
+  token = jwt.verify(token, "resetPassword");
+  return {
+    password,
+    token,
+  };
+};
+module.exports = {
+  registerValidator,
+  loginValidator,
+  forgetValidator,
+  verifyPasswordValidator,
+};
