@@ -29,6 +29,34 @@ response:
 token: jwt token
 }
 
+# Forgot-Password
+
+/api/api/forgot-password =>POST
+
+payload:
+{
+email
+}
+
+response:
+{
+token generate for update password
+
+}
+
+/api/verify_password/:token =>POST
+
+payload:
+{
+"password":"",
+"confirmPassword":""
+}
+
+response:
+{
+password update succesfully..
+}
+
 # Product
 
 /api/product => GET

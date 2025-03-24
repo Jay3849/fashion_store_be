@@ -16,6 +16,18 @@ const cartValidator = async (data) => {
     if (!isExists) {
       throw Error("Product doesn't exists");
     }
+
+    if (cardItem.size) {
+      const sizeExists = await ProductModel.exists({
+        _id: cardItem.productId,
+        size: { $in: [cardItem.size] },
+      });
+      console.log(cardItem, sizeExists);
+
+      if (!sizeExists) {
+        throw new Error("Size  is not available for this product");
+      }
+    }
   }
   return data;
 };

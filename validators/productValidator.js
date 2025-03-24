@@ -14,10 +14,18 @@ const productValidator = async (data) => {
     tags,
     discription,
     rating,
+    size,
   } = data;
 
   if (!name || !category || !price) {
     throw Error("product details is require!!!");
+  }
+
+  if (
+    (size && !Array.isArray(size)) ||
+    size.some((s) => typeof s !== "string")
+  ) {
+    throw Error("size must be an Array of string");
   }
   // 'sdcsdc' = true
   // 9 = false
@@ -47,6 +55,7 @@ const productValidator = async (data) => {
   } else if (tags && !Array.isArray(tags)) {
     throw new Error("Tags must be an array!!");
   }
+
   const payload = {
     name,
     category,
@@ -60,6 +69,10 @@ const productValidator = async (data) => {
     discription,
     rating,
   };
+
+  if (size) {
+    payload.size = size;
+  }
   if (tags) {
     payload.tags = tags;
   }
