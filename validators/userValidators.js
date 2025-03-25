@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+
 const registerValidator = (data) => {
   let { name, email, password } = data;
   if (!name || !email | !password) {
@@ -37,6 +38,8 @@ const loginValidator = (data) => {
   };
 };
 
+//forgot password validator #####
+
 const forgetValidator = (data) => {
   const { email } = data;
   if (!email) {
@@ -63,13 +66,24 @@ const verifyPasswordValidator = async (data) => {
   if (!password || !confirmPassword || password !== confirmPassword || !token) {
     throw Error("password does not match..");
   }
+  jwt.verify(token, "resetPassword", (err, decoded) => {
+    if (err) {
+      throw {
+        status: false,
+        message: "Token Expired ",
+      };
+    } else {
+      token = decoded;
+    }
+  });
 
-  token = jwt.verify(token, "resetPassword");
   return {
+    confirmPassword,
     password,
     token,
   };
 };
+
 module.exports = {
   registerValidator,
   loginValidator,
