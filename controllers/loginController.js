@@ -76,7 +76,7 @@ const verifyPassword = async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
-      msg: error?.message || "Invalid data..",
+      msg: error || "Invalid data..",
     });
   }
 };

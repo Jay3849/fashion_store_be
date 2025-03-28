@@ -78,7 +78,6 @@ const verifyPasswordValidator = async (data) => {
   });
 
   return {
-    confirmPassword,
     password,
     token,
   };

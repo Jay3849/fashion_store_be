@@ -5,6 +5,7 @@ const {
   cartUpdateValidator,
 } = require("../validators/cartValidator");
 const mongoose = require("mongoose");
+
 const addToCart = async (req, res) => {
   try {
     const cartValidatedData = await cartValidator(req.body);
