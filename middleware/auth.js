@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const UserModel = require("../models/loginModel");
 
 const authMiddleware = async (req, res, next) => {
   try {
@@ -6,13 +7,21 @@ const authMiddleware = async (req, res, next) => {
     if (!token) {
       throw Error("access denied");
     }
-    console.log(token);
     const user = jwt.verify(token, "admin");
+    const isExits = await UserModel.exists({
+      _id: user?._id,
+    });
+    if (!isExits) {
+      throw Error("unathorized access");
+    }
     req.user = user;
 
     next();
   } catch (error) {
-    res.status(403).json(error.message || "unathorized access");
+    res.status(403).json({
+      msg: error.message || "unathorized access",
+      status_code: "E_UNAUTHORIZED_ACCESS",
+    });
   }
 };
 

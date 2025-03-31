@@ -5,11 +5,11 @@ const { validatedOrderData } = require("../validators/orderValidator");
 
 const orderdata = async (req, res) => {
   try {
-    const { cartId, address } = req.params;
+    const { cartId } = req.params;
+    const { address } = req.body;
     await validatedOrderData({ cartId, address });
     const cartData = await CartModel.findOne({ _id: cartId }).populate(
-      "items.productId",
-      "items.address"
+      "items.productId"
     );
 
     if (!cartData) {
@@ -20,6 +20,7 @@ const orderdata = async (req, res) => {
     const payload = {
       userId: cartData.userId,
       items: [],
+      address,
 
       totalAmount: 0,
     };
@@ -31,7 +32,6 @@ const orderdata = async (req, res) => {
           quantity: item.quantity,
           price: item.productId.price * item.quantity,
           size: item.size,
-          address: item.address,
         };
 
         totalAmount += dd.price;
@@ -40,6 +40,7 @@ const orderdata = async (req, res) => {
     payload.totalAmount = totalAmount;
     const order = new OrderModel(payload);
     await order.save();
+    await cartData.deleteOne();
     return res.status(201).json(order);
   } catch (error) {
     res.status(400).json({ msg: error?.message });

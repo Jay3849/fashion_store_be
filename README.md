@@ -171,3 +171,13 @@ response :
 {
 per page user see products...
 }
+
+# order
+
+http://localhost:3000/api/orders/:id => POST
+
+response:
+{
+return id or total amount all productss
+(order done ..)
+}

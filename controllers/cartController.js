@@ -8,7 +8,8 @@ const mongoose = require("mongoose");
 
 const addToCart = async (req, res) => {
   try {
-    const cartValidatedData = await cartValidator(req.body);
+    const { _id } = req.user;
+    const cartValidatedData = await cartValidator(req.body, (userId = _id));
     const existingCart = await CartModel.findOne({ userId: req.user._id });
     let response;
     if (existingCart) {

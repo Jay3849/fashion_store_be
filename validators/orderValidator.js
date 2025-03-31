@@ -3,6 +3,7 @@ const OrderModel = require("../models/orderModel");
 
 const validatedOrderData = async (data) => {
   let { cartId, address } = data;
+  console.log("jdjdjd", data);
 
   console.log("sdcsdcscsdcdscd", cartId);
   const requiredFields = [
@@ -14,29 +15,25 @@ const validatedOrderData = async (data) => {
     "zipCode",
     "country",
   ];
-  if (!requiredFields) {
-    throw Error("please Enter a require details");
+  if (!address) {
+    throw new Error("Address is required!");
   }
 
   const phoneRegex = /^[0-9]{10}$/;
   if (!phoneRegex.test(address.phoneNumber)) {
-    return res
-      .status(400)
-      .json({ error: "Invalid phone number! Must be 10 digits." });
+    throw new Error("Invalid phone number! Must be 10 digits");
   }
 
-  const zipRegex = /^[0-9]+$/;
-  if (!zipRegex.test(address.zipCode)) {
-    return res
-      .status(400)
-      .json({ error: "Invalid zip code! Must contain only numbers." });
+  const zipRegex = /^\d{6}$/;
+  if (!zipRegex.test(String(address.zipCode))) {
+    throw new Error("Invalid zip code! Must be exactly 6 digits.");
   }
 
   if (!cartId) {
     throw Error("Cart ID is required to place an order");
   }
   const cartExists = await CartModel.exists({ _id: cartId }).exec();
-  console.log("ksksj", cartExists);
+  console.log("ksksk", cartExists);
 
   if (!cartExists) {
     throw new Error(

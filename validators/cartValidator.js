@@ -1,7 +1,7 @@
-const cartModel = require("../models/cartModel");
+const CartModel = require("../models/cartModel");
 const ProductModel = require("../models/productModel");
 
-const cartValidator = async (data) => {
+const cartValidator = async (data, userId) => {
   if (!Array.isArray(data)) {
     throw Error("Invalid data");
   }
@@ -15,6 +15,21 @@ const cartValidator = async (data) => {
     const isExists = await ProductModel.findOne({ _id: cardItem.productId });
     if (!isExists) {
       throw Error("Product doesn't exists");
+    }
+
+    const cartExists = await CartModel.findOne({ userId });
+    console.log("djdj", cartExists, userId);
+
+    if (cartExists) {
+      const itemExists = await CartModel.exists({
+        userId,
+        "items.productId": cardItem.productId,
+        "items.size": cardItem.size,
+      });
+
+      if (itemExists) {
+        throw Error("Item with the same size already in cart!");
+      }
     }
 
     if (cardItem.size) {
