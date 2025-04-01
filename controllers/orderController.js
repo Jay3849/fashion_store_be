@@ -86,8 +86,15 @@ const orderDelete = async (req, res) => {
   try {
     const { orderId } = req.params;
 
-    console.log(orderId);
-  } catch (error) {}
+    const cancleOrder = await OrderModel.deleteOne({ _id: orderId });
+    if (!cancleOrder) {
+      throw Error("order not exists...");
+    }
+    res.status(200).json(cancleOrder);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: error?.message || "Error deleting order" });
+  }
 };
 
 module.exports = {

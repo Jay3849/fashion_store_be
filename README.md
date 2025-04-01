@@ -181,3 +181,27 @@ response:
 return id or total amount all productss
 (order done ..)
 }
+
+http://localhost:3000/api/orders/:id => GET
+
+response:{
+specific order check user
+}
+
+http://localhost:3000/api/orders => GET
+
+response:
+{
+user this time login all orders can be see
+}
+
+http://localhost:3000/api/orders/:id => DELETE
+
+response:
+{
+
+"acknowledged": true,
+"deletedCount": 1
+(order delete complete )
+
+}
