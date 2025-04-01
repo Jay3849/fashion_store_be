@@ -1,6 +1,5 @@
 const CartModel = require("../models/cartModel");
 const OrderModel = require("../models/orderModel");
-const orderModel = require("../models/orderModel");
 const { validatedOrderData } = require("../validators/orderValidator");
 
 const orderdata = async (req, res) => {
@@ -15,7 +14,6 @@ const orderdata = async (req, res) => {
     if (!cartData) {
       throw Error("not found");
     }
-    console.log(cartData);
     let totalAmount = 0;
     const payload = {
       userId: cartData.userId,
@@ -47,6 +45,54 @@ const orderdata = async (req, res) => {
   }
 };
 
+const getone = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    console.log(orderId);
+
+    if (!orderId) return res.status(400).json({ msg: "Order ID is required" });
+
+    const getOne = await OrderModel.findById(orderId)
+      .populate("userId")
+      .populate("items.productId");
+
+    if (!getOne) return res.status(404).json({ msg: "Order not found" });
+
+    res.status(200).json(getOne);
+  } catch (error) {
+    console.error("Error fetching order:", error);
+    res.status(500).json({ msg: error?.message || "Order not available" });
+  }
+};
+
+const getAll = async (req, res) => {
+  try {
+    const { _id: userId } = req.user;
+
+    const getAll = await OrderModel.find({ userId })
+      .populate("userId")
+      .populate("items.productId");
+
+    if (!getAll) return res.status(404).json({ msg: "Order not found" });
+
+    res.status(200).json(getAll);
+  } catch (error) {
+    console.error("Error fetching order:", error);
+    res.status(500).json({ msg: error?.message || "Order not available" });
+  }
+};
+
+const orderDelete = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+
+    console.log(orderId);
+  } catch (error) {}
+};
+
 module.exports = {
   orderdata,
+  getone,
+  getAll,
+  orderDelete,
 };

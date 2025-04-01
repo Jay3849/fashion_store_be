@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { ProductTypeEnum } = require("../utills/enum");
 
 const ProductSchema = mongoose.Schema({
   name: {

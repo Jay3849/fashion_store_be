@@ -1,4 +1,6 @@
 const jwt = require("jsonwebtoken");
+const UserModel = require("../models/loginModel");
+const bcrypt = require("bcrypt");
 
 const registerValidator = (data) => {
   let { name, email, password } = data;
@@ -30,6 +32,12 @@ const loginValidator = (data) => {
   const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
   if (!emailRegex.test(email)) {
     throw new Error("Invalid email format");
+  }
+
+  const user = UserModel.findOne({ email });
+
+  if (!user) {
+    return res.status(401).json({ msg: "Invalid Email or password" });
   }
 
   return {

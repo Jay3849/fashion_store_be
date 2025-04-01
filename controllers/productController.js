@@ -125,7 +125,7 @@ async function getall(req, res) {
     res.status(200).json(getall);
   } catch (error) {
     // console.error(error);
-    res.status(400).json({ msg: error?.message || "producs not available" });
+    res.status(400).json({ msg: error?.message || "products not available" });
   }
 }
 
