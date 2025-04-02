@@ -1,9 +1,11 @@
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/loginModel");
 const bcrypt = require("bcrypt");
+const { Roles } = require("../utills/enum");
 
 const registerValidator = (data) => {
-  let { name, email, password } = data;
+  let { name, email, password, role } = data;
+
   if (!name || !email | !password) {
     throw Error("Details are required");
   }
@@ -11,15 +13,27 @@ const registerValidator = (data) => {
   if (!emailRegex.test(email)) {
     throw new Error("Invalid email format");
   }
-
+  if (/\s/.test(password)) {
+    throw new Error("Password should not contain spaces.");
+  }
+  if (password.length < 6) {
+    throw new Error("Password must be at least 6 characters long.");
+  }
   if (password) {
     password = jwt.sign(password, "jay");
   }
   console.log(password);
+
+  if (!role || ![Roles.Admin, Roles.User].includes(role)) {
+    role = Roles.User; // Default role
+  }
+  console.log("role", role);
+
   return {
     name,
     email,
     password,
+    role,
   };
 };
 
