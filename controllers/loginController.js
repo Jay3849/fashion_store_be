@@ -6,6 +6,7 @@ const {
   verifyPasswordValidator,
 } = require("../validators/userValidators");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 //  is_admin =true
 require("dotenv").config();
@@ -13,6 +14,7 @@ require("dotenv").config();
 async function register(req, res) {
   try {
     let validatedData = registerValidator(req.body || {});
+
     const user = new UserModel(validatedData);
     await user.save();
     res.status(200).json(user);
@@ -29,21 +31,21 @@ async function login(req, res) {
     if (!findUser) {
       throw Error("Invalid email ");
     }
-    console.log(loginData?.password, findUser.password);
-
     const authUserPass = jwt.verify(findUser.password, "jay");
     if (loginData?.password !== authUserPass) {
       throw Error("Invalid password");
     }
+
     const { email, name, _id, role } = findUser;
+    let token = jwt.sign({ email, name, _id, role }, process.env.JWT_SECRET);
     res.status(200).json({
-      token: jwt.sign({ email, name, _id, role }, process.env.JWT_SECRET),
+      token,
       user: findUser,
     });
 
     console.log("token", token);
   } catch (error) {
-    console.error(error.message);
+    console.error("jlklkllk", error.message);
     res.status(400).json({
       msg: error?.message || "Invalid Data please register after login",
     });

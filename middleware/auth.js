@@ -27,10 +27,9 @@ const authMiddleware = async (req, res, next) => {
 };
 
 const isAdmin = (req, res, next) => {
-  if (req.user.role !== Roles.Admin) {
+  if (req?.user?.role !== Roles.Admin) {
     return res.status(403).json({ msg: "Access denied. Admins only." });
   }
-
   next();
 };
 

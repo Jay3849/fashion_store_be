@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/loginModel");
 const bcrypt = require("bcrypt");
-const { Roles } = require("../utills/enum");
+const Roles = require("../utills/enum");
 
 const registerValidator = (data) => {
   let { name, email, password, role } = data;
@@ -51,7 +51,7 @@ const loginValidator = (data) => {
   const user = UserModel.findOne({ email });
 
   if (!user) {
-    return res.status(401).json({ msg: "Invalid Email or password" });
+    throw Error("Invalid Email or password");
   }
 
   return {
