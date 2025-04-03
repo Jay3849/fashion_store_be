@@ -6,14 +6,14 @@ const {
   getOne,
   getall,
 } = require("../controllers/productController");
-const { authMiddleware } = require("../middleware/auth");
+const { authMiddleware, isAdmin } = require("../middleware/auth");
 
 const productRoute = Router();
 
 productRoute.get("/product", getall);
 productRoute.get("/product/:id", getOne);
-productRoute.post("/product", authMiddleware, createProduct);
-productRoute.put("/product/:id", authMiddleware, updateProduct);
-productRoute.delete("/product/:id", authMiddleware, deleteProduct);
+productRoute.post("/product", authMiddleware, isAdmin, createProduct);
+productRoute.put("/product/:id", authMiddleware, isAdmin, updateProduct);
+productRoute.delete("/product/:id", authMiddleware, isAdmin, deleteProduct);
 
 module.exports = productRoute;

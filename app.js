@@ -7,6 +7,7 @@ const CartRouter = require("./routes/cartRoute");
 const CategoryRouter = require("./routes/categoryRoute");
 const orderRouter = require("./routes/orderRoute");
 const app = express();
+require("dotenv").config();
 
 app.use(express.json());
 app.use(cors());

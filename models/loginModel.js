@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Roles = require("../utills/enum");
 
 const UserSchema = mongoose.Schema(
   {
@@ -18,6 +19,12 @@ const UserSchema = mongoose.Schema(
 
       require: true,
       minlength: [6, "Password must be at least 6 characters long"],
+    },
+
+    role: {
+      type: String,
+      enum: [Roles.Admin, Roles.User],
+      default: Roles.User,
     },
   },
   {

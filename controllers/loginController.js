@@ -7,6 +7,9 @@ const {
 } = require("../validators/userValidators");
 const jwt = require("jsonwebtoken");
 
+//  is_admin =true
+require("dotenv").config();
+
 async function register(req, res) {
   try {
     let validatedData = registerValidator(req.body || {});
@@ -32,11 +35,13 @@ async function login(req, res) {
     if (loginData?.password !== authUserPass) {
       throw Error("Invalid password");
     }
-    const { email, name, _id } = findUser;
+    const { email, name, _id, role } = findUser;
     res.status(200).json({
-      token: jwt.sign({ email, name, _id }, "admin"),
+      token: jwt.sign({ email, name, _id, role }, process.env.JWT_SECRET),
       user: findUser,
     });
+
+    console.log("token", token);
   } catch (error) {
     console.error(error.message);
     res.status(400).json({
