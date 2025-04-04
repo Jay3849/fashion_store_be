@@ -1,6 +1,7 @@
 const ProductModel = require("../models/productModel");
 // const adminloginValidator = require("../validators/adminValidator");
 const { productValidator } = require("../validators/productValidator");
+const { validData } = require("../validators/adminValidator");
 
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/loginModel");
@@ -66,8 +67,28 @@ async function deleteProduct(req, res) {
   }
 }
 
+async function updateProduct(req, res) {
+  try {
+    // Check if the user is an admin
+    const { id } = req.params;
+    const product = await validData({ ...req.body, productId: id });
+
+    const response = await ProductModel.findOneAndUpdate({ _id: id }, product, {
+      new: true,
+    });
+
+    if (!response) {
+      throw Error("Product not found or you don't have access.");
+    }
+    res.status(200).json({ msg: "Product updated successfully", response });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ msg: error?.message || "Invalid product details" });
+  }
+}
 module.exports = {
   getProducts,
   addProduct,
   deleteProduct,
+  updateProduct,
 };

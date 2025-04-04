@@ -205,3 +205,49 @@ response:
 (order delete complete )
 
 }
+
+# Admin Panel
+
+=> admin alreday create in backend
+
+http://localhost:3000/api/admin/products => GET
+
+response:
+{
+admin this time login then admin products can see (only this admin products)
+}
+
+http://localhost:3000/api/admin/products => POST(product add)
+
+payload:
+{
+all products deatils can bi enter and add product
+}
+response :
+{
+add products can see with deatails
+}
+
+http://localhost:3000/api/admin/products/:id => PUT
+
+payload:
+{
+prouduct details can bi chnage (main name ,category ,price or type can bi enter and change )
+}
+
+response:
+{
+product update and can see update product details
+}
+
+http://localhost:3000/api/admin/products/:id => DELETE
+
+payload:
+{
+only url can add productId and delete product
+}
+
+response:
+{
+product deleted succesfully ...
+}
