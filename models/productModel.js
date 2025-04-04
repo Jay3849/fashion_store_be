@@ -62,6 +62,11 @@ const ProductSchema = mongoose.Schema({
   rating: {
     type: String,
   },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+    required: true,
+  },
 });
 
 const ProductModel = mongoose.model("product", ProductSchema);

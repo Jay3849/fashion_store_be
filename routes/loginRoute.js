@@ -12,4 +12,5 @@ loginrouter.post("/login", login);
 
 loginrouter.post("/forgot-password", forgotPassword);
 loginrouter.post("/verify_password/:token", verifyPassword);
+
 module.exports = loginrouter;
