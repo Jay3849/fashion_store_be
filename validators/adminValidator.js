@@ -30,6 +30,11 @@ const validData = async (data) => {
   if (isNaN(+price)) {
     throw new Error("Price must be an integer !");
   }
+  const imageRegex = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gim;
+
+  if (!imageRegex.test(image)) {
+    throw new Error("image url is not  valid!!!");
+  }
 
   if (tags && Array.isArray(tags)) {
     for (const tag of tags) {
