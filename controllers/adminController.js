@@ -43,21 +43,59 @@ const Roles = require("../utills/enum");
 
 const getProducts = async (req, res) => {
   try {
-    const { q } = req.query;
+    const { q, page, per_page, type, category } = req.query;
+    const options = { limit: per_page ?? 12, skip: 0 };
     const userId = req.user._id;
+    const aggregation = [];
 
     const query = { createdBy: userId };
 
-    if (q) {
-      query.$or = [
-        { name: { $regex: q, $options: "i" } },
-        { category: { $regex: q, $options: "i" } },
-        { design: { $regex: q, $options: "i" } },
-        { brand: { $regex: q, $options: "i" } },
-      ];
+    if (+page > 1) {
+      options.skip = (+page - 1) * (per_page || options.limit);
+      options.limit = +(per_page || options.limit);
     }
 
-    const products = await ProductModel.find(query);
+    if (q) {
+      aggregation.push({
+        $match: {
+          $or: [
+            { name: { $regex: q, $options: "i" } },
+            { category: { $regex: q, $options: "i" } },
+            { design: { $regex: q, $options: "i" } },
+            { brand: { $regex: q, $options: "i" } },
+          ],
+        },
+      });
+    }
+
+    if (type) {
+      aggregation.push({
+        $match: {
+          type,
+        },
+      });
+    }
+    if (category && category?.length) {
+      aggregation.push({
+        $match: {
+          category: { $in: category },
+        },
+      });
+    }
+
+    aggregation.push(
+      {
+        $skip: options.skip,
+      },
+      {
+        $limit: options.limit,
+      }
+    );
+    aggregation;
+    const products = await ProductModel.aggregate(aggregation).exec();
+    if (!products) {
+      throw Error("product does not exists");
+    }
     res.status(200).json(products);
   } catch (error) {
     res
