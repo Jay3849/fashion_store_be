@@ -12,11 +12,11 @@ const productValidator = async (data) => {
     brand,
     discount,
     tags,
+
     discription,
     rating,
     size,
   } = data;
-
   if (!name || !category || !price) {
     throw Error("product details is require!!!");
   }
@@ -43,9 +43,17 @@ const productValidator = async (data) => {
   // }
   const imageRegex = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gim;
 
-  if (!imageRegex.test(image)) {
-    throw new Error("image url is not  valid!!!");
-  }
+const base64Regex = /^data:image\/(png|jpeg|jpg|webp|gif);base64,/;
+
+if (!imageRegex.test(image) && !base64Regex.test(image)) {
+  throw new Error("image must be valid URL or base64 data");
+}
+
+  // const imageRegex = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gim;
+
+  // if (!imageRegex.test(image)) {
+  //   throw new Error("image url is not  valid!!!");
+  // }
   if (tags && Array.isArray(tags)) {
     for (const tag of tags) {
       if (!tag.type || !tag.label) {
