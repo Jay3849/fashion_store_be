@@ -163,19 +163,6 @@ any type seraching user can match then see prodcut then
 not avalible this product..
 }
 
-# product pagination
-
-/api/product?page=1 => GET
-
-response :
-{
-per page user see products...
-}
-
-# order
-
-http://localhost:3000/api/orders/:id => POST
-
 response:
 {
 return id or total amount all productss

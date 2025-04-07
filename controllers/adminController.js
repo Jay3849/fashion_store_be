@@ -8,19 +8,63 @@ const UserModel = require("../models/loginModel");
 
 const Roles = require("../utills/enum");
 
-async function getProducts(req, res) {
+// async function getProducts(req, res, q) {
+//   try {
+//     const { q } = req.query;
+
+//     console.log("csdscsdcsdcscsd");
+
+//     const products = await ProductModel.find({ createdBy: req.user._id });
+
+//     res.status(200).json(products);
+
+//     const aggregation = [];
+
+//     if (q) {
+//       aggregation.push({
+//         $match: {
+//           $or: [
+//             { name: { $regex: q, $options: "i" } },
+//             { category: { $regex: q, $options: "i" } },
+//             { design: { $regex: q, $options: "i" } },
+//             { brand: { $regex: q, $options: "i" } },
+//           ],
+//         },
+//       });
+//     }
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ msg: "Error fetching products", error: error.message });
+//   }
+
+//   //product searching..
+// }
+
+const getProducts = async (req, res) => {
   try {
-    console.log("csdscsdcsdcscsd");
+    const { q } = req.query;
+    const userId = req.user._id;
 
-    const products = await ProductModel.find({ createdBy: req.user._id });
+    const query = { createdBy: userId };
 
+    if (q) {
+      query.$or = [
+        { name: { $regex: q, $options: "i" } },
+        { category: { $regex: q, $options: "i" } },
+        { design: { $regex: q, $options: "i" } },
+        { brand: { $regex: q, $options: "i" } },
+      ];
+    }
+
+    const products = await ProductModel.find(query);
     res.status(200).json(products);
   } catch (error) {
     res
       .status(500)
       .json({ msg: "Error fetching products", error: error.message });
   }
-}
+};
 
 async function addProduct(req, res) {
   try {
