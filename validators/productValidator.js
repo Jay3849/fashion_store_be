@@ -41,19 +41,13 @@ const productValidator = async (data) => {
   // if (!categoryRegex.includes(category)) {
   //   throw new Error("not valid category!!");
   // }
+
+
   const imageRegex = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gim;
 
-const base64Regex = /^data:image\/(png|jpeg|jpg|webp|gif);base64,/;
-
-if (!imageRegex.test(image) && !base64Regex.test(image)) {
-  throw new Error("image must be valid URL or base64 data");
-}
-
-  // const imageRegex = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gim;
-
-  // if (!imageRegex.test(image)) {
-  //   throw new Error("image url is not  valid!!!");
-  // }
+  if (!imageRegex.test(image)) {
+    throw new Error("image url is not  valid!!!");
+  }
   if (tags && Array.isArray(tags)) {
     for (const tag of tags) {
       if (!tag.type || !tag.label) {

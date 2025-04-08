@@ -106,7 +106,7 @@ async function getall(req, res) {
     if (category && category?.length) {
       aggregation.push({
         $match: {
-          category: { $in: [category] },
+          category: { $in: category },
         },
       });
     }
