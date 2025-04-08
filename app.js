@@ -8,6 +8,7 @@ const CategoryRouter = require("./routes/categoryRoute");
 const orderRouter = require("./routes/orderRoute");
 const { authMiddleware, isAdmin } = require("./middleware/auth");
 const { AdminRouter } = require("./routes/adminRoute");
+const { adminCategoryRouter } = require("./routes/adminCategoryRoute");
 const app = express();
 require("dotenv").config();
 
@@ -38,7 +39,10 @@ app.use("/api", [
   CategoryRouter,
   orderRouter,
 ]);
-app.use("/api/admin", authMiddleware, isAdmin, [AdminRouter]);
+app.use("/api/admin", authMiddleware, isAdmin, [
+  AdminRouter,
+  adminCategoryRouter,
+]);
 
 app.listen(3000, async () => {
   console.log(`server running on http://localhost:3000`);
