@@ -9,6 +9,8 @@ const orderRouter = require("./routes/orderRoute");
 const { authMiddleware, isAdmin } = require("./middleware/auth");
 const { AdminRouter } = require("./routes/adminRoute");
 const { adminCategoryRouter } = require("./routes/adminCategoryRoute");
+const FileUploadRoute = require("./routes/fileUploadRoutes");
+const fileUploader = require("express-fileupload");
 const app = express();
 require("dotenv").config();
 
@@ -32,12 +34,13 @@ app.use(cors());
 //   }, {});
 //   next();
 // });
-app.use("/api", [
+app.use("/api", fileUploader({ useTempFiles: true }), [
   loginrouter,
   productRoute,
   CartRouter,
   CategoryRouter,
   orderRouter,
+  FileUploadRoute,
 ]);
 app.use("/api/admin", authMiddleware, isAdmin, [
   AdminRouter,

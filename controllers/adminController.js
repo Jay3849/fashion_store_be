@@ -6,7 +6,7 @@ const { validData } = require("../validators/adminValidator");
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/loginModel");
 
-const Roles = require("../utills/enum");
+const { Roles } = require("../utills/enum");
 
 // async function getProducts(req, res, q) {
 //   try {
@@ -75,10 +75,11 @@ const getProducts = async (req, res) => {
         },
       });
     }
+
     if (category && category?.length) {
       aggregation.push({
         $match: {
-          category: { $in: category},
+          category: { $in: category },
         },
       });
     }

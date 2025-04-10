@@ -3,4 +3,8 @@ const Roles = {
   User: "user",
 };
 
-module.exports = Roles;
+const FileUploadModules = {
+  PRODUCT: "Product",
+  PROFILE: "Profile",
+};
+module.exports = { Roles, FileUploadModules };

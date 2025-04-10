@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/loginModel");
 const bcrypt = require("bcrypt");
-const Roles = require("../utills/enum");
+const { Roles } = require("../utills/enum");
 
 const registerValidator = (data) => {
   let { name, email, password, role } = data;
