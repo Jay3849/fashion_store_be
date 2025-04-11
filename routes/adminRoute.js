@@ -7,6 +7,7 @@ const {
   deleteProduct,
   updateProduct,
 } = require("../controllers/adminController");
+const { getAllOrders } = require("../controllers/adminOrdersController");
 
 const AdminRouter = Router();
 
@@ -16,6 +17,7 @@ AdminRouter.delete("/products/:id", deleteProduct);
 AdminRouter.put("/products/:id", updateProduct);
 
 AdminRouter.get("/users", allUser);
+AdminRouter.get("/orders", getAllOrders);
 
 module.exports = {
   AdminRouter,
