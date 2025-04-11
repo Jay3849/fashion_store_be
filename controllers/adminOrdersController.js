@@ -22,7 +22,7 @@ const getAllOrders = async (req, res) => {
       { $unwind: "$items" },
       {
         $lookup: {
-          from: "products",
+          from: "product",
           localField: "items.productId",
           foreignField: "_id",
           as: "product",
