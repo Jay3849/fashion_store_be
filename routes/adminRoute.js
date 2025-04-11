@@ -1,11 +1,12 @@
 const { Router } = require("express");
+
+const { allUser } = require("../controllers/adminUserController");
 const {
   getProducts,
   addProduct,
   deleteProduct,
   updateProduct,
 } = require("../controllers/adminController");
-const { allUser } = require("../controllers/adminUserController");
 
 const AdminRouter = Router();
 

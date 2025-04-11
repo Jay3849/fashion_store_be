@@ -13,9 +13,12 @@ const uploadFile = async (req, res) => {
       throw Error("File missing");
     }
     await uploadvalidData({ module, id });
+
     const fileUploader = new FileUploaderService();
     const public_id = short.generate();
     const result = await fileUploader.upload(file, public_id, "products");
+    console.log(result);
+
     let isSaved = false;
     switch (module) {
       case FileUploadModules.PRODUCT:

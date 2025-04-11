@@ -1,10 +1,11 @@
+// const ProductModel = require("../models/productModel");
 const ProductModel = require("../models/productModel");
+
 // const adminloginValidator = require("../validators/adminValidator");
 const { productValidator } = require("../validators/productValidator");
 const { validData } = require("../validators/adminValidator");
 
 const jwt = require("jsonwebtoken");
-const UserModel = require("../models/loginModel");
 
 const { Roles } = require("../utills/enum");
 
