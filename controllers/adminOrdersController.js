@@ -22,7 +22,7 @@ const getAllOrders = async (req, res) => {
       { $unwind: "$items" },
       {
         $lookup: {
-          from: "product",
+          from: "products",
           localField: "items.productId",
           foreignField: "_id",
           as: "product",
@@ -51,36 +51,6 @@ const getAllOrders = async (req, res) => {
           },
         },
       },
-      //   {
-      //     $lookup: {
-      //       from: "products",
-      //       localField: "items.productId",
-      //       foreignField: "_id",
-      //       as: "productDetails",
-      //     },
-      //   },
-
-      //   {
-      //     $lookup: {
-      //       from: "products",
-      //       localField: "productId",
-      //       foreignField: "_id",
-      //       as: "productDetails",
-      //     },
-      //   },
-      //   {
-      //     $project: {
-      //       _id: 1,
-      //       total: 1,
-      //       createdAt: 1,
-      //       users: {
-      //         _id: "$user._id",
-      //         name: "user.name",
-      //         email: "$user.email",
-      //       },
-      //       productDetails: 1,
-      //     },
-      //   },
     ]);
     res.status(200).json(orders);
   } catch (error) {

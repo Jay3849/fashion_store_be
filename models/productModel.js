@@ -73,11 +73,11 @@ const ProductSchema = mongoose.Schema({
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
+    ref: "users",
     required: true,
   },
 });
 
-const ProductModel = mongoose.model("product", ProductSchema);
+const ProductModel = mongoose.model("products", ProductSchema);
 
 module.exports = ProductModel;
