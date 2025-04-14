@@ -35,12 +35,14 @@ const getAllOrders = async (req, res) => {
         },
       },
       {
+        $project: {
+          product: 0,
+        },
+      },
+      {
         $group: {
           _id: "$_id",
-          userId: { $first: "$userId" },
-          user: { $first: "$user" },
-          address: { $first: "$address" },
-          totalAmount: { $first: "$totalAmount" },
+          doc: { $first: "$$ROOT" },
           items: {
             $push: {
               product: "$items.product",
@@ -49,6 +51,16 @@ const getAllOrders = async (req, res) => {
               size: "$items.size",
             },
           },
+        },
+      },
+      {
+        $addFields: {
+          "doc.items": "$items",
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: "$doc",
         },
       },
     ]);

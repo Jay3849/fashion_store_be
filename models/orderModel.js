@@ -46,6 +46,7 @@ const orderSchema = new mongoose.Schema(
       set: (value) => parseFloat(value),
     },
   },
+
   {
     timestamps: true,
   }

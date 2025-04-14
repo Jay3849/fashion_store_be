@@ -19,8 +19,8 @@ const orderdata = async (req, res) => {
       userId: cartData.userId,
       items: [],
       address,
-
       totalAmount: 0,
+      orderedAt: new Date(),
     };
     payload.items = cartData.items
       .filter((item) => item?.productId)
@@ -39,7 +39,9 @@ const orderdata = async (req, res) => {
     const order = new OrderModel(payload);
     await order.save();
     await cartData.deleteOne();
-    return res.status(201).json(order);
+    console.log(order);
+    // return res.status(201).json(order);
+    return res.status(201).json(order.toObject({ versionKey: false }));
   } catch (error) {
     res.status(400).json({ msg: error?.message });
   }
