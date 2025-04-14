@@ -71,18 +71,72 @@ async function getOne(req, res) {
   }
 }
 
+// async function getall(req, res) {
+//   try {
+//     const { page, per_page, category, type, q } = req.query;
+//     const options = { limit: per_page ?? 12, skip: 0 };
+//     const aggregation = [];
+
+//     if (+page > 1) {
+//       options.skip = (+page - 1) * (per_page || options.limit);
+//       options.limit = +(per_page || options.limit);
+//     }
+
+//     // product searching...
+//     if (q) {
+//       aggregation.push({
+//         $match: {
+//           $or: [
+//             { name: { $regex: q, $options: "i" } },
+//             { category: { $regex: q, $options: "i" } },
+//             { design: { $regex: q, $options: "i" } },
+//             { brand: { $regex: q, $options: "i" } },
+//           ],
+//         },
+//       });
+//     }
+//     if (type) {
+//       aggregation.push({
+//         $match: {
+//           type,
+//         },
+//       });
+//     }
+
+//     if (category && category?.length) {
+//       aggregation.push({
+//         $match: {
+//           category: { $in: category },
+//         },
+//       });
+//     }
+
+//     aggregation.push(
+//       {
+//         $skip: options.skip,
+//       },
+//       { $limit: options.limit }
+//     );
+//     const getall = await ProductModel.aggregate(aggregation).exec();
+
+//     if (!getall) {
+//       throw Error("Products does not exists");
+//     }
+//     res.status(200).json(getall);
+//   } catch (error) {
+//     // console.error(error);
+//     res.status(400).json({ msg: error?.message || "products not available" });
+//   }
+// }
 async function getall(req, res) {
   try {
     const { page, per_page, category, type, q } = req.query;
-    const options = { limit: per_page ?? 12, skip: 0 };
+    const pageNumber = parseInt(page) || 1;
+    const perPageNumber = parseInt(per_page) || 12;
+
     const aggregation = [];
 
-    if (+page > 1) {
-      options.skip = (+page - 1) * (per_page || options.limit);
-      options.limit = +(per_page || options.limit);
-    }
-
-    // product searching...
+    // 🔍 Search
     if (q) {
       aggregation.push({
         $match: {
@@ -95,39 +149,47 @@ async function getall(req, res) {
         },
       });
     }
+
+    // 🧍 Type filter
     if (type) {
       aggregation.push({
-        $match: {
-          type,
-        },
+        $match: { type },
       });
     }
 
-    if (category && category?.length) {
+    // 📂 Category filter
+    if (category && category.length) {
+      const categoryFilter = Array.isArray(category) ? category : [category];
       aggregation.push({
         $match: {
-          category: { $in: category },
+          category: { $in: categoryFilter },
         },
       });
     }
 
-    aggregation.push(
-      {
-        $skip: options.skip,
-      },
-      { $limit: options.limit }
-    );
-    const getall = await ProductModel.aggregate(aggregation).exec();
+    // 🔢 Total count before pagination
+    const totalAggregation = [...aggregation, { $count: "total" }];
+    const totalDocs = await ProductModel.aggregate(totalAggregation);
+    const total = totalDocs[0]?.total || 0;
 
-    if (!getall) {
-      throw Error("Products does not exists");
-    }
-    res.status(200).json(getall);
+    // 📃 Pagination
+    aggregation.push(
+      { $skip: (pageNumber - 1) * perPageNumber },
+      { $limit: perPageNumber }
+    );
+
+    // 🔄 Get products
+    const products = await ProductModel.aggregate(aggregation).exec();
+
+    res.status(200).json({
+      data: products,
+      total,
+    });
   } catch (error) {
-    // console.error(error);
-    res.status(400).json({ msg: error?.message || "products not available" });
+    res.status(400).json({ msg: error?.message || "Products not available" });
   }
 }
+
 
 module.exports = {
   updateProduct,
