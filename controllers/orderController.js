@@ -3,9 +3,12 @@ const CartModel = require("../models/cartModel");
 const OrderModel = require("../models/orderModel");
 const RazorpayService = require("../services/RazorpayService");
 const { validatedOrderData } = require("../validators/orderValidator");
+const { default: mongoose } = require("mongoose");
 
 const orderdata = async (req, res) => {
+  const session = await mongoose.startSession();
   try {
+    session.startTransaction();
     const { cartId } = req.params;
     const { address } = req.body;
     await validatedOrderData({ cartId, address });
@@ -48,8 +51,12 @@ const orderdata = async (req, res) => {
       currency: "INR",
       receipt,
     });
-    return res.status(201).json(rozarpayOrder);
+    await session.commitTransaction();
+    session.endSession();
+    return res.status(201).json({ order, rozarpayOrder });
   } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
     res.status(400).json({ msg: error?.message });
   }
 };
