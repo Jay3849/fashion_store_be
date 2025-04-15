@@ -42,7 +42,6 @@ const productValidator = async (data) => {
   //   throw new Error("not valid category!!");
   // }
 
-
   const imageRegex = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gim;
 
   if (!imageRegex.test(image)) {

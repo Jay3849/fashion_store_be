@@ -1,5 +1,7 @@
+const shortUUID = require("short-uuid");
 const CartModel = require("../models/cartModel");
 const OrderModel = require("../models/orderModel");
+const RazorpayService = require("../services/RazorpayService");
 const { validatedOrderData } = require("../validators/orderValidator");
 
 const orderdata = async (req, res) => {
@@ -39,9 +41,14 @@ const orderdata = async (req, res) => {
     const order = new OrderModel(payload);
     await order.save();
     await cartData.deleteOne();
-    console.log(order);
-    // return res.status(201).json(order);
-    return res.status(201).json(order.toObject({ versionKey: false }));
+    const receipt = shortUUID.uuid();
+    const rozarpay = new RazorpayService();
+    const rozarpayOrder = await rozarpay.createOrder({
+      amount: totalAmount,
+      currency: "INR",
+      receipt,
+    });
+    return res.status(201).json(rozarpayOrder);
   } catch (error) {
     res.status(400).json({ msg: error?.message });
   }

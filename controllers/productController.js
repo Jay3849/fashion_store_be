@@ -176,6 +176,7 @@ async function getall(req, res) {
     const products = await ProductModel.aggregate(aggregation).exec();
 
     res.status(200).json({
+      order,
       data: products,
       total,
     });
