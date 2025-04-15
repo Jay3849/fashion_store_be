@@ -42,7 +42,7 @@ const orderdata = async (req, res) => {
       });
     payload.totalAmount = totalAmount;
     const order = new OrderModel(payload);
-    await order.save();
+    (await order.save()).populate("userId");
     await cartData.deleteOne();
     const receipt = shortUUID.uuid();
     const rozarpay = new RazorpayService();
