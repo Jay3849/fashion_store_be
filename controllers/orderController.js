@@ -53,7 +53,9 @@ const orderdata = async (req, res) => {
     });
     await session.commitTransaction();
     session.endSession();
-    return res.status(201).json({ order, rozarpayOrder });
+    return res
+      .status(201)
+      .json({ order, rozarpayOrder, key_id: process.env.RAZORPAY_TEST_KEY_ID });
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
