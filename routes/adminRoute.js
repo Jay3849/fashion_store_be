@@ -7,7 +7,11 @@ const {
   deleteProduct,
   updateProduct,
 } = require("../controllers/adminController");
-const { getAllOrders } = require("../controllers/adminOrdersController");
+const {
+  getAllOrders,
+  getOne,
+} = require("../controllers/adminOrdersController");
+// const { getOne } = require("../controllers/productController");
 
 const AdminRouter = Router();
 
@@ -18,6 +22,7 @@ AdminRouter.put("/products/:id", updateProduct);
 
 AdminRouter.get("/users", allUser);
 AdminRouter.get("/orders", getAllOrders);
+AdminRouter.get("/orders/:orderId", getOne);
 
 module.exports = {
   AdminRouter,

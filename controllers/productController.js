@@ -136,7 +136,6 @@ async function getall(req, res) {
 
     const aggregation = [];
 
-    // 🔍 Search
     if (q) {
       aggregation.push({
         $match: {
@@ -150,14 +149,12 @@ async function getall(req, res) {
       });
     }
 
-    // 🧍 Type filter
     if (type) {
       aggregation.push({
         $match: { type },
       });
     }
 
-    // 📂 Category filter
     if (category && category.length) {
       const categoryFilter = Array.isArray(category) ? category : [category];
       aggregation.push({
@@ -167,19 +164,17 @@ async function getall(req, res) {
       });
     }
 
-    // 🔢 Total count before pagination
     const totalAggregation = [...aggregation, { $count: "total" }];
     const totalDocs = await ProductModel.aggregate(totalAggregation);
     const total = totalDocs[0]?.total || 0;
 
-    // 📃 Pagination
     aggregation.push(
       { $skip: (pageNumber - 1) * perPageNumber },
       { $limit: perPageNumber }
     );
 
-    // 🔄 Get products
     const products = await ProductModel.aggregate(aggregation).exec();
+    s;
 
     res.status(200).json({
       data: products,
@@ -189,7 +184,6 @@ async function getall(req, res) {
     res.status(400).json({ msg: error?.message || "Products not available" });
   }
 }
-
 
 module.exports = {
   updateProduct,
