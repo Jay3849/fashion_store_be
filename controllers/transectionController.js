@@ -1,8 +1,6 @@
 const transectionValidData = require("../validators/transectionValidator");
 const orderModel = require("../models/orderModel");
-const { transectionModel } = require("../models/transectionModel");
 const { TransectionStatus } = require("../utills/enum");
-const{TransectionStatus}= require("../utills/enum")
 
 const transectionData = async (req, res) => {
   try {

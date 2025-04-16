@@ -1,6 +1,5 @@
 const orderModel = require("../models/orderModel");
 const UserModel = require("../models/loginModel");
-const { transectionModel } = require("../models/transectionModel");
 
 const transectionValidData = async (data) => {
   const { orderId, paymentId } = data;
@@ -19,7 +18,7 @@ const transectionValidData = async (data) => {
     throw Error("orderId does not exist ... ");
   }
 
-  const transection = await transectionModel.findOne({ orderId });
+  const transection = await orderModel.findOne({ orderId });
   if (transection && transection?.status === TransectionStatus.SUCCESS) {
     throw Error("Already paid");
   }
