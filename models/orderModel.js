@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { TransectionStatus } = require("../utills/enum");
 
 const orderSchema = new mongoose.Schema(
   {
@@ -44,6 +45,11 @@ const orderSchema = new mongoose.Schema(
       required: true,
       min: [0, "Total amount cannot be negative."],
       set: (value) => parseFloat(value),
+    },
+
+    status: {
+      type: String,
+      enum: [TransectionStatus.FAILED, TransectionStatus.SUCCESS],
     },
 
     razorpay_payment_id: {

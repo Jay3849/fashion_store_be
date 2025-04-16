@@ -7,19 +7,17 @@ const transectionData = async (req, res) => {
   try {
     const { orderId } = req.params;
     const { paymentId, razorpaySignature } = req.body;
-
     await transectionValidData({ orderId, paymentId });
 
-    const data = await orderModel.findOne({ _id: orderId });
-    const payload = {
-      orderId: data._id,
-      razorpayOrderId: data.razorpay_order_id,
-      paymentId: paymentId,
-      userId: data.userId,
-      status: TransectionStatus.SUCCESS,
-    };
-    const transectionData = new transectionModel(payload);
-    await transectionData.save();
+    const data = await orderModel.findByIdAndUpdate(
+      orderId,
+      {
+        razorpay_payment_id: paymentId,
+      },
+      { new: true }
+    );
+
+    res.status(200).json(data);
   } catch (error) {
     res.status(400).json({ msg: error?.message || "Invalid Data" });
   }

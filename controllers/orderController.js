@@ -67,13 +67,12 @@ const orderdata = async (req, res) => {
 const getone = async (req, res) => {
   try {
     const { orderId } = req.params;
-    console.log(orderId);
-
     if (!orderId) return res.status(400).json({ msg: "Order ID is required" });
 
     const getOne = await OrderModel.findById(orderId)
       .populate("userId")
-      .populate("items.productId");
+      .populate("items.productId")
+      .populate("transaction");
 
     if (!getOne) return res.status(404).json({ msg: "Order not found" });
 
