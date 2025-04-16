@@ -2,6 +2,7 @@ const transectionValidData = require("../validators/transectionValidator");
 const orderModel = require("../models/orderModel");
 const { transectionModel } = require("../models/transectionModel");
 const { TransectionStatus } = require("../utills/enum");
+const{TransectionStatus}= require("../utills/enum")
 
 const transectionData = async (req, res) => {
   try {
@@ -13,6 +14,7 @@ const transectionData = async (req, res) => {
       orderId,
       {
         razorpay_payment_id: paymentId,
+        status:TransectionStatus.SUCCESS
       },
       { new: true }
     );

@@ -116,7 +116,7 @@ const cartDeleteProduct = async (req, res) => {
     const response = await isExist.updateOne({
       $pull: { items: { productId: id } },
     });
-    res.status(200).json({ response, msg: "Item removed from cart" });
+    res.status(200).json({ isExist, msg: "Item removed from cart" });
   } catch (error) {
     console.error(error);
     res.status(400).json({ msg: error?.message || "cart details empty!!!" });

@@ -46,7 +46,7 @@ const orderdata = async (req, res) => {
 
     const rozarpay = new RazorpayService();
     const rozarpayOrder = await rozarpay.createOrder({
-      amount: totalAmount,
+      amount: totalAmount * 100,
       currency: "INR",
       receipt,
     });
