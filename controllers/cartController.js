@@ -107,16 +107,16 @@ const getCartProduct = async (req, res) => {
 
 const cartDeleteProduct = async (req, res) => {
   try {
-    const { id } = req.body;
-    const remove = await CartModel.deleteOne({
-      userId: req.user._id,
-      "items.id": id,
-    });
+    const { id } = req.params;
 
-    if (!remove) {
-      throw Error("Product does not exists");
+    const isExist = await CartModel.findOne({ userId: req.user._id });
+    if (!isExist) {
+      throw Error("cart does not exists");
     }
-    res.status(200).json({ remove, msg: "Item removed from cart" });
+    const response = await isExist.updateOne({
+      $pull: { items: { productId: id } },
+    });
+    res.status(200).json({ response, msg: "Item removed from cart" });
   } catch (error) {
     console.error(error);
     res.status(400).json({ msg: error?.message || "cart details empty!!!" });

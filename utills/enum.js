@@ -7,4 +7,9 @@ const FileUploadModules = {
   PRODUCT: "Product",
   PROFILE: "Profile",
 };
-module.exports = { Roles, FileUploadModules };
+
+const TransectionStatus = {
+  FAILED: "Failed",
+  SUCCESS: "Success",
+};
+module.exports = { Roles, FileUploadModules, TransectionStatus };

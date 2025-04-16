@@ -11,6 +11,7 @@ const { AdminRouter } = require("./routes/adminRoute");
 const { adminCategoryRouter } = require("./routes/adminCategoryRoute");
 const FileUploadRoute = require("./routes/fileUploadRoutes");
 const fileUploader = require("express-fileupload");
+const TransectionRouter = require("./routes/transectionRoute");
 const app = express();
 require("dotenv").config();
 
@@ -41,6 +42,7 @@ app.use("/api", fileUploader({ useTempFiles: true }), [
   CategoryRouter,
   orderRouter,
   FileUploadRoute,
+  TransectionRouter,
 ]);
 app.use("/api/admin", authMiddleware, isAdmin, [
   AdminRouter,

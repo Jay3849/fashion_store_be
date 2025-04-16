@@ -31,7 +31,7 @@ token: jwt token
 
 # Forgot-Password
 
-/api/api/forgot-password =>POST
+/api/forgot-password =>POST
 
 payload:
 {

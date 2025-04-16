@@ -45,6 +45,13 @@ const orderSchema = new mongoose.Schema(
       min: [0, "Total amount cannot be negative."],
       set: (value) => parseFloat(value),
     },
+
+    razorpay_payment_id: {
+      type: String,
+    },
+    razorpay_order_id: {
+      type: String,
+    },
   },
 
   {

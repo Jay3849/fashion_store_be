@@ -42,20 +42,21 @@ const orderdata = async (req, res) => {
       });
     payload.totalAmount = totalAmount;
     const order = new OrderModel(payload);
-    (await order.save()).populate("userId");
-    await cartData.deleteOne();
     const receipt = shortUUID.uuid();
+
     const rozarpay = new RazorpayService();
     const rozarpayOrder = await rozarpay.createOrder({
       amount: totalAmount,
       currency: "INR",
       receipt,
     });
+    order.razorpay_order_id = rozarpayOrder.id;
+    (await order.save()).populate("userId");
     await session.commitTransaction();
     session.endSession();
     return res
       .status(201)
-      .json({ order, rozarpayOrder, key_id: process.env.RAZORPAY_TEST_KEY_ID });
+      .json({ order, key_id: process.env.RAZORPAY_TEST_KEY_ID });
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
