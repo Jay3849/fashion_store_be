@@ -24,6 +24,7 @@ const addToCart = async (req, res) => {
       const cartData = new CartModel(payload);
       await cartData.save();
       response = cartData;
+      
     }
 
     res.status(200).json(response);

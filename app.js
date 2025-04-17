@@ -12,6 +12,8 @@ const { adminCategoryRouter } = require("./routes/adminCategoryRoute");
 const FileUploadRoute = require("./routes/fileUploadRoutes");
 const fileUploader = require("express-fileupload");
 const TransectionRouter = require("./routes/transectionRoute");
+const reportRouter = require("./routes/reportRoute");
+const { index } = require("./controllers/testController");
 
 const app = express();
 require("dotenv").config();
@@ -43,13 +45,14 @@ app.use("/api", fileUploader({ useTempFiles: true }), [
   CategoryRouter,
   orderRouter,
   FileUploadRoute,
-  TransectionRouter
+  TransectionRouter,
+  reportRouter
 ]);
 app.use("/api/admin", authMiddleware, isAdmin, [
   AdminRouter,
   adminCategoryRouter,
 ]);
-
+app.get('/',index)
 app.listen(3000, async () => {
   console.log(`server running on http://localhost:3000`);
   await dbConnection();

@@ -30,11 +30,11 @@ const ProductSchema = mongoose.Schema(
     },
     offer: {
       type: String,
-      required: true,
+      // required: true,
     },
     brand: {
       type: String,
-      required: true,
+      // required: true,
     },
     discount: {
       type: String,
@@ -50,10 +50,10 @@ const ProductSchema = mongoose.Schema(
           required: true,
         },
         bgColor: {
-          type: String,
+          // type: String,
         },
         textColor: {
-          type: String,
+          // type: String,
         },
       },
     ],
@@ -70,7 +70,7 @@ const ProductSchema = mongoose.Schema(
     },
     rating: {
       type: String,
-      required: true,
+      // required: true,
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
@@ -82,6 +82,8 @@ const ProductSchema = mongoose.Schema(
   {
     timestamps: true,
   }
+
+
 );
 
 const ProductModel = mongoose.model("products", ProductSchema);
