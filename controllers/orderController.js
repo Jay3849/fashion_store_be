@@ -51,7 +51,11 @@ const orderdata = async (req, res) => {
       receipt,
     });
     order.razorpay_order_id = rozarpayOrder.id;
+    await CartModel.findByIdAndUpdate(cartId, { items: [] });
+
+
     (await order.save()).populate("userId");
+    
     await session.commitTransaction();
     session.endSession();
     return res
