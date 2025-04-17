@@ -88,6 +88,7 @@ const getAll = async (req, res) => {
     const { _id: userId } = req.user;
 
     const getAll = await OrderModel.find({ userId })
+     .sort({ createdAt: -1 })
       .populate("userId")
       .populate("items.productId");
 
