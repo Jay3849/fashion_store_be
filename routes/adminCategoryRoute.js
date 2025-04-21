@@ -1,9 +1,12 @@
 const { Router } = require("express");
-const category = require("../controllers/adminCategoryController");
 
+const {createCategory, getAll} = require('../controllers/adminCategoryController')
 const adminCategoryRouter = Router();
 
-adminCategoryRouter.get("/category", category);
+adminCategoryRouter.post("/category",createCategory)
+adminCategoryRouter.get("/category",getAll)
+
+
 
 module.exports = {
   adminCategoryRouter,

@@ -1,5 +1,9 @@
 const ProductModel = require("../models/productModel");
 
+
+
+
+
 const getCategories = async (req, res) => {
   // get all distinct category from product modal and return as response
 
@@ -10,4 +14,5 @@ const getCategories = async (req, res) => {
 
 module.exports = {
   getCategories,
+  
 };

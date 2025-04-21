@@ -23,6 +23,11 @@ const transectionData = async (req, res) => {
   }
 };
 
+
+
+
+
+
 module.exports = {
   transectionData,
 };

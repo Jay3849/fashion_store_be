@@ -1,4 +1,4 @@
-const CartModel = require("../models/cartModel");
+  const CartModel = require("../models/cartModel");
 const ProductModel = require("../models/productModel");
 const {
   cartValidator,
