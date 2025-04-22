@@ -22,13 +22,98 @@ const createCategory = async (req, res) => {
 
 
 
-
 const getAll = async (req, res) => {
   try {
-    const categories = await categoryModel.find().sort({ name: 1 }); 
-    res.status(200).json({ categories });
+    const { q } = req.query;
+    const aggregation = [];
+
+    if (q) {
+      aggregation.push({
+        $match: {
+          $or: [
+            { name: { $regex: q, $options: "i" } }
+          ]
+        }
+      });
+    }
+    aggregation.push({
+      $sort: { createdAt: -1 }
+    });
+
+    const getall = await categoryModel.aggregate(aggregation);
+
+    if (!getall || getall.length === 0) {
+      throw new Error("No categories found...");
+    }
+
+    res.status(200).json({
+      success: true,
+      data: getall
+    });
   } catch (error) {
-    res.status(500).json({ msg: "Failed to fetch categories", error: error.message });
+    res.status(400).json({ success: false, msg: error?.message });
   }
 };
-module.exports = { createCategory,getAll };
+
+
+
+// const updateCategory = async(req,res)=>{
+//   try {
+
+//     const {id}=req.params;
+
+//     const response = await categoryModel.findByIdAndUpdate({_id:id},category,{
+//       new :true,
+//     });
+
+//     if(!response){
+//       throw error ("categorys not found!!!")
+//     }
+//     res.status(200).json({msg:"category update successfully",response})
+
+
+    
+//   } catch (error) {
+//     res.status(400).json({msg:error?.message}||"invalid category name !!!")
+    
+//   }
+// }
+const updateCategory = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const response = await categoryModel.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+
+    if (!response) {
+      throw new Error("Category not found!!!");
+    }
+
+    res.status(200).json({ msg: "Category updated successfully", response });
+
+  } catch (error) {
+    res.status(400).json({ msg: error?.message || "Invalid category data!!!" });
+  }
+};
+
+
+const deleteCategory = async(req,res)=>{
+  try {
+    const {id} = req.params;
+
+    const cateegory = await categoryModel.deleteOne({_id:id})
+    if(!cateegory){
+      throw new Error ("category does not exist!!")
+    }
+    res.status(200).json(cateegory)
+  } catch (error) {
+    throw Error({msg:"error deleted category ",error:error.message})
+    
+  }
+}
+
+
+
+
+module.exports = { createCategory,getAll ,updateCategory,deleteCategory};

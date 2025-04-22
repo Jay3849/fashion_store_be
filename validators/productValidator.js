@@ -1,9 +1,10 @@
+const categoryModel = require("../models/categoryModel");
 const ProductModel = require("../models/productModel");
 
 const productValidator = async (data) => {
   let {
     name,
-    category,
+    categoryId,
     price,
     design,
     image,
@@ -17,7 +18,7 @@ const productValidator = async (data) => {
     rating,
     size,
   } = data;
-  if (!name || !category || !price) {
+  if (!name || !categoryId || !price) {
     throw Error("product details is require!!!");
   }
 
@@ -35,6 +36,13 @@ const productValidator = async (data) => {
   }
   if (isNaN(+price)) {
     throw new Error("Price must be an integer !");
+  }
+
+  const exists = await categoryModel.exists({_id:categoryId})
+  if(!exists){
+    throw new Error("category is not  valid!!!");
+    
+
   }
   // const categoryRegex = ["Men", "women", "kids"];
 
@@ -59,7 +67,7 @@ const productValidator = async (data) => {
 
   const payload = {
     name,
-    category,
+    categoryId,
     price,
     design,
     image,
