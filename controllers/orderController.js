@@ -10,8 +10,8 @@ const orderdata = async (req, res) => {
   try {
     session.startTransaction();
     const { cartId } = req.params;
-    const { address } = req.body;
-    await validatedOrderData({ cartId, address });
+    const { addressId } = req.body;
+    await validatedOrderData({ cartId, addressId });
     const cartData = await CartModel.findOne({ _id: cartId }).populate(
       "items.productId"
     );
@@ -23,7 +23,7 @@ const orderdata = async (req, res) => {
     const payload = {
       userId: cartData.userId,
       items: [],
-      address,
+      addressId,
       totalAmount: 0,
       orderedAt: new Date(),
     };
@@ -77,7 +77,8 @@ const getone = async (req, res) => {
     const getOne = await OrderModel.findById(orderId)
       .populate("userId")
       .populate("items.productId")
-      .populate("transaction");
+      .populate("addressId");
+      // .populate("transaction");
 
     if (!getOne) return res.status(404).json({ msg: "Order not found" });
 
