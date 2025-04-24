@@ -111,7 +111,7 @@ async function addProduct(req, res) {
       return res.status(403).json({ msg: "Access denied. Admins only." });
     }
 
-    let productData = await validateProductdata(req.body || {});
+    let productData = await validateProductdata({...(req.body || {}),action:'create'});
 
     productData.createdBy = req.user._id;
 
@@ -154,7 +154,7 @@ async function updateProduct(req, res) {
   try {
     // Check if the user is an admin
     const { id } = req.params;
-    const product = await validateProductdata({ ...req.body, productId: id });
+    const product = await validateProductdata({ ...req.body, productId: id,action:"edit" });
 
     const response = await ProductModel.findOneAndUpdate({ _id: id }, product, {
       new: true,

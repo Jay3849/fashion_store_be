@@ -16,17 +16,17 @@ const validateProductdata = async (data) => {
     discription,
     rating,
     size,
-    productId,
+    productId,action
   } = data;
 
   if (!name || !price || !categoryId || !type) {
     throw Error("must be enter feileds after update product!!");
   }
-
+if(action==='edit'){
   const isExists = await productModel.findOne({ _id: productId });
   if (!isExists) {
     throw Error("product does not  Exists!!");
-  }
+  }}
   if (isNaN(+price)) {
     throw new Error("Price must be an integer !");
   }
