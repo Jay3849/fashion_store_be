@@ -185,7 +185,7 @@ async function updateProduct(req, res) {
     if (!response) {
       throw Error("Product not found or you don't have access.");
     }
-    res.status(200).json({ msg: "Product updated successfully", response });
+    res.status(200).json( response );
   } catch (error) {
     console.error(error);
     res.status(400).json({ msg: error?.message || "Invalid product details" });
