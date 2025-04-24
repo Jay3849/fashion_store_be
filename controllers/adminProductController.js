@@ -2,7 +2,7 @@
 const ProductModel = require("../models/productModel");
 
 // const adminloginValidator = require("../validators/adminValidator");
-const { validData, validateProductdata } = require("../validators/adminValidator");
+const {  validateProductdata } = require("../validators/adminValidator");
 
 const jwt = require("jsonwebtoken");
 
@@ -154,7 +154,7 @@ async function updateProduct(req, res) {
   try {
     // Check if the user is an admin
     const { id } = req.params;
-    const product = await validData({ ...req.body, productId: id });
+    const product = await validateProductdata({ ...req.body, productId: id });
 
     const response = await ProductModel.findOneAndUpdate({ _id: id }, product, {
       new: true,
