@@ -31,7 +31,7 @@ const uploadFile = async (req, res) => {
       default:
         break;
     }
-    return res.status(201).json({ status: isSaved });
+    return res.status(201).json({ status: isSaved,url: result.secure_url || result.url });
   } catch (error) {
     console.error(error);
     res.status(400).json({ msg: error?.message || "Invalid product details" });
