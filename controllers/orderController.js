@@ -90,13 +90,13 @@ const getone = async (req, res) => {
 const getAll = async (req, res) => {
   try {
     const { _id: userId } = req.user;
-
     const getAll = await OrderModel.find({ userId })
      .sort({ createdAt: -1 })
       .populate("userId")
       .populate("items.productId");
 
     if (!getAll) return res.status(404).json({ msg: "Order not found" });
+
 
     res.status(200).json(getAll);
   } catch (error) {
