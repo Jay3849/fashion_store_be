@@ -42,10 +42,9 @@ const getAll = async (req, res) => {
       throw new Error("No categories found...");
     }
 
-    res.status(200).json({
-      success: true,
-      data: getall
-    });
+    res.status(200).json(
+      getall
+    );
   } catch (error) {
     res.status(400).json({ success: false, msg: error?.message });
   }
@@ -65,7 +64,7 @@ const updateCategory = async (req, res) => {
       throw new Error("Category not found!!!");
     }
 
-    res.status(200).json({ msg: "Category updated successfully", response });
+    res.status(200).json(response );
 
   } catch (error) {
     res.status(400).json({ msg: error?.message || "Invalid category data!!!" });
