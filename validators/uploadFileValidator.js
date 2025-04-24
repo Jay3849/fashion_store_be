@@ -6,7 +6,7 @@ const { FileUploadModules } = require("../utills/enum");
 const uploadvalidData = async (data) => {
   const { module, id } = data;
 
-  if (!module) {
+  if (!module&&!Object.values(FileUploadModules).includes(module)) {
     throw Error("module is not exists!!");
   }
 

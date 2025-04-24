@@ -16,7 +16,7 @@ const uploadFile = async (req, res) => {
 
     const fileUploader = new FileUploaderService();
     const public_id = short.generate();
-    const result = await fileUploader.upload(file, public_id, "products");
+    const result = await fileUploader.upload(file, public_id, module);
     console.log(result);
 
     let isSaved = false;

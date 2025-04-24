@@ -84,6 +84,21 @@ const getProducts = async (req, res) => {
       });
     }
 
+
+    aggregation.push(
+      {
+        $lookup: {
+          from: "categorys", 
+          localField: "categoryId",
+          foreignField: "_id",
+          as: "category"
+        }
+      },
+      {
+        $unwind: "$category" 
+      },
+    )
+
     aggregation.push(
       {
         $skip: options.skip,
