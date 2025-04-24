@@ -4,7 +4,7 @@ const productModel = require("../models/productModel");
 const validData = async (data) => {
   let {
     name,
-    category,
+    categoryId,
     price,
     design,
     image,
@@ -19,7 +19,7 @@ const validData = async (data) => {
     productId,
   } = data;
 
-  if (!name || !price || !category || !type) {
+  if (!name || !price || !categoryId || !type) {
     throw Error("must be enter feileds after update product!!");
   }
 
@@ -48,7 +48,7 @@ const validData = async (data) => {
 
   const payload = {
     name,
-    category,
+    categoryId,
     price,
     design,
     image,

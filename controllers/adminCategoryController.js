@@ -1,10 +1,6 @@
 const categoryModel = require("../models/categoryModel");
 const categoryData = require("../validators/categoryValidator");
 
-// const category = async (req, res) => {
-//   const category = await productModel.distinct("category");
-//   return res.status(200).json(category);
-// };
 
 const createCategory = async (req, res) => {
   try {
@@ -57,27 +53,6 @@ const getAll = async (req, res) => {
 
 
 
-// const updateCategory = async(req,res)=>{
-//   try {
-
-//     const {id}=req.params;
-
-//     const response = await categoryModel.findByIdAndUpdate({_id:id},category,{
-//       new :true,
-//     });
-
-//     if(!response){
-//       throw error ("categorys not found!!!")
-//     }
-//     res.status(200).json({msg:"category update successfully",response})
-
-
-    
-//   } catch (error) {
-//     res.status(400).json({msg:error?.message}||"invalid category name !!!")
-    
-//   }
-// }
 const updateCategory = async (req, res) => {
   try {
     const { id } = req.params;

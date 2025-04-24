@@ -14,9 +14,9 @@ const index = async (req, res) => {
     //   prd.categoryId = cat._id;
     // }
     //  prd.category=undefined;
-  const res= await ProductModel.updateMany({}, { $unset: { category: 1 } });
-  console.log('updated cateegory',prd);
-
+    await ProductModel.updateMany({}, { $unset: { category: "" } });
+    console.log("Old 'category' field removed from all products.");
+    
   }
 // ProductModel.collection.update({}, {$unset: {field: 1 }});
   res.status(200).json({

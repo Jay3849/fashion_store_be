@@ -59,7 +59,7 @@ async function getOne(req, res) {
   try {
     const { id } = req.params;
     console.log(id);
-    const getone = await ProductModel.findOne({ _id: id });
+    const getone = await ProductModel.findOne({ _id: id }).populate('categoryId');
 
     if (!getone) {
       throw Error("Product does not exists");
@@ -155,17 +155,29 @@ async function getall(req, res) {
       });
     }
 
-    if (category && category.length) {
-      const categoryFilter = Array.isArray(category) ? category : [category];
-      aggregation.push({
-        $match: {
-          category: { $in: categoryFilter },
-        },
-      });
-    }
-
+    // if (category && category.length) {
+    //   const categoryFilter = Array.isArray(category) ? category : [category];
+    //   aggregation.push({
+    //     $match: {
+    //       category: { $in: categoryFilter },
+    //     },
+    //   });
+    // }
+    aggregation.push(
+      {
+        $lookup: {
+          from: "categorys", 
+          localField: "categoryId",
+          foreignField: "_id",
+          as: "category"
+        }
+      },
+      {
+        $unwind: "$category" 
+      },
+    )
     const totalAggregation = [...aggregation, { $count: "total" }];
-    const totalDocs = await ProductModel.aggregate(totalAggregation);
+    const totalDocs = await ProductModel.aggregate(totalAggregation).exec();
     const total = totalDocs[0]?.total || 0;
 
     aggregation.push(
