@@ -85,14 +85,14 @@ const getone = async (req, res) => {
     aggregation.push(
       {
         $lookup: {
-          from: "categorys", 
-          localField: "categoryId",
+          from: "Address", 
+          localField: "addressId",
           foreignField: "_id",
-          as: "category"
+          as: "address"
         }
       },
       {
-        $unwind: "$category" 
+        $unwind: "$address" 
       },
     )
     res.status(200).json(getOne);
