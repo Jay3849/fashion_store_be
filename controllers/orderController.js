@@ -71,6 +71,7 @@ const orderdata = async (req, res) => {
 const getone = async (req, res) => {
   try {
     const { orderId } = req.params;
+    const aggregation=[];
     if (!orderId) return res.status(400).json({ msg: "Order ID is required" });
 
     const getOne = await OrderModel.findById(orderId)
@@ -80,6 +81,20 @@ const getone = async (req, res) => {
 
     if (!getOne) return res.status(404).json({ msg: "Order not found" });
 
+    
+    aggregation.push(
+      {
+        $lookup: {
+          from: "categorys", 
+          localField: "categoryId",
+          foreignField: "_id",
+          as: "category"
+        }
+      },
+      {
+        $unwind: "$category" 
+      },
+    )
     res.status(200).json(getOne);
   } catch (error) {
     console.error("Error fetching order:", error);

@@ -10,7 +10,7 @@ const createCategory = async (req, res) => {
 
     const category = new categoryModel(validData);
     await category.save();
-    res.status(201).json({ msg: "category created successfully...", category });
+    res.status(201).json( category );
   } catch (error) {
     res.status(400).json({ msg: error.message });
   }

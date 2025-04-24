@@ -8,12 +8,11 @@ const addressValidator = (data) => {
       city,
       state,
       country,
-      addressLine,
       landmark,
       isDefault
     } = data;
   
-    if (!fullName || !phoneNumber || !pincode || !city || !state || !addressLine) {
+    if (!fullName || !phoneNumber || !pincode || !city || !state) {
       throw new Error("All required address fields must be filled.");
     }
   
@@ -50,9 +49,9 @@ const addressValidator = (data) => {
       city,
       state,
       country,
-      addressLine,
       landmark,
-      isDefault: isDefault || false
+      isDefault: isDefault || false,
+      
     };
   };
   

@@ -14,6 +14,7 @@ const fileUploader = require("express-fileupload");
 const TransectionRouter = require("./routes/transectionRoute");
 const reportRouter = require("./routes/reportRoute");
 const { index } = require("./controllers/testController");
+const addressRouter = require("./routes/addressRoute");
 
 const app = express();
 require("dotenv").config();
@@ -46,7 +47,8 @@ app.use("/api", fileUploader({ useTempFiles: true }), [
   orderRouter,
   FileUploadRoute,
   TransectionRouter,
-  reportRouter
+  reportRouter,
+  addressRouter
 ]);
 app.use("/api/admin", authMiddleware, isAdmin, [
   AdminRouter,

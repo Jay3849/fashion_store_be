@@ -30,15 +30,21 @@ const orderSchema = new mongoose.Schema(
         size: { type: String },
       },
     ],
-    address: {
-      fullName: { type: String, required: true },
-      phoneNumber: { type: String, required: true },
-      street: { type: String, required: true },
-      city: { type: String, required: true },
-      state: { type: String, required: true },
-      zipCode: { type: String, required: true },
-      country: { type: String, required: true, default: "India" },
-    },
+    // address: {
+    //   fullName: { type: String, required: true },
+    //   phoneNumber: { type: String, required: true },
+    //   street: { type: String, required: true },
+    //   city: { type: String, required: true },
+    //   state: { type: String, required: true },
+    //   zipCode: { type: String, required: true },
+    //   country: { type: String, required: true, default: "India" },
+    // },
+      addressId: {
+        ref:"Address",
+          required: true,
+          type: mongoose.Schema.Types.ObjectId,
+    
+        },
 
     totalAmount: {
       type: Number,
