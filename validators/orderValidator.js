@@ -1,8 +1,12 @@
 const CartModel = require("../models/cartModel");
 const OrderModel = require("../models/orderModel");
+const addressModel = require("../models/addressModel")
+
+
+
 
 const validatedOrderData = async (data) => {
-  let { cartId, address } = data;
+  let { cartId, addressId } = data;
   console.log("jdjdjd", data);
 
   console.log("sdcsdcscsdcdscd", cartId);
@@ -15,9 +19,15 @@ const validatedOrderData = async (data) => {
     "zipCode",
     "country",
   ];
-  if (!address) {
-    throw new Error("Address is required!");
+  if (!addressId) {
+    throw new Error("AddressId is required!");
   }
+    const exists = await addressModel.exists({_id:categoryId})
+    if(!exists){
+      throw new Error("category is not  valid!!!");
+      
+  
+    }
 
   const phoneRegex = /^[0-9]{10}$/;
   if (!phoneRegex.test(address.phoneNumber)) {
