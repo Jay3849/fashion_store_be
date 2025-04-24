@@ -108,7 +108,14 @@ const getProducts = async (req, res) => {
       }
     );
     aggregation;
-    const products = await ProductModel.aggregate(aggregation).exec();
+    const products = await ProductModel.aggregate(aggregation).exec([
+      {$sort:{
+         createdAt: -1 
+        
+
+      }}
+    ]);
+
     if (!products) {
       throw Error("product does not exists");
     }
