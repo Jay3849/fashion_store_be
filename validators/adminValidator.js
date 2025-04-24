@@ -1,7 +1,7 @@
 const Role = require("../utills/enum");
 const productModel = require("../models/productModel");
 
-const validData = async (data) => {
+const validateProductdata = async (data) => {
   let {
     name,
     categoryId,
@@ -62,4 +62,4 @@ const validData = async (data) => {
   return payload;
 };
 
-module.exports = { validData };
+module.exports = { validateProductdata };

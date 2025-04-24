@@ -2,8 +2,7 @@
 const ProductModel = require("../models/productModel");
 
 // const adminloginValidator = require("../validators/adminValidator");
-const { productValidator } = require("../validators/productValidator");
-const { validData } = require("../validators/adminValidator");
+const { validData, validateProductdata } = require("../validators/adminValidator");
 
 const jwt = require("jsonwebtoken");
 
@@ -112,7 +111,7 @@ async function addProduct(req, res) {
       return res.status(403).json({ msg: "Access denied. Admins only." });
     }
 
-    let productData = await productValidator(req.body || {});
+    let productData = await validateProductdata(req.body || {});
 
     productData.createdBy = req.user._id;
 
