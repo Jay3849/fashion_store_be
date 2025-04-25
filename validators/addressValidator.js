@@ -16,9 +16,9 @@ const addressValidator = (data) => {
       throw new Error("All required address fields must be filled.");
     }
   
-    const phoneRegex = /^[6-9]\d{10}$/;
+    const phoneRegex = /^\d{10}$/;
     if (!phoneRegex.test(phoneNumber)) {
-      throw new Error("Invalid Indian phone number.");
+      throw new Error("Invalid  phone number.");
     }
   
     const pincodeRegex = /^[1-9][0-9]{5}$/;

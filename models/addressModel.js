@@ -33,10 +33,10 @@ const addressSchema = new mongoose.Schema({
   landmark: {
     type: String
   },
-  isDefault: {
-    type: Boolean,
-    default: false
-  }
+  // isDefault: {
+  //   type: Boolean,
+  //   default: false
+  // }
 }, {
   timestamps: true
 });

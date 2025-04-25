@@ -11,7 +11,7 @@ const orderRouter = Router();
 
 orderRouter.post("/orders/:cartId", authMiddleware, orderdata);
 orderRouter.get("/orders/:orderId", authMiddleware, getone);
-orderRouter.get("/orders", authMiddleware, getAll);
+// orderRouter.get("/orders", authMiddleware, getAll);
 orderRouter.delete("/orders/:orderId", authMiddleware, orderDelete);
 
 module.exports = orderRouter;
