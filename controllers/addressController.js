@@ -91,18 +91,23 @@ const getAddress = async (req, res) => {
     try {
       const { addressId } = req.params;
       const userId = req.user._id; 
+      console.log(addressId,userId);
+      
 
-      const isAddressExist  = await AddressModel.findOneAndDelete({
+      const isAddressExist  = await AddressModel.findOne({
         _id:addressId,
-        userId:req.user._id
+        userId
       })
+      console.log(isAddressExist);
+      
       if(!isAddressExist){
-        res.status(400).json({msg:"address is not found this user ",error})
+        throw new Error("address is not found this user")
       }
-      res.status(200).json()
+     await AddressModel.deleteOne({_id:addressId}) ;
+     res.status(200).json({msg:"address delete succesfull"})
   
     } catch (error) {
-      res.status(500).json({ success: false, msg: error.message });
+      res.status(500).json({  msg: error.message });
     }
   };
   
