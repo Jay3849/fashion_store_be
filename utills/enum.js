@@ -12,4 +12,10 @@ const TransectionStatus = {
   FAILED: "Failed",
   SUCCESS: "Success",
 };
-module.exports = { Roles, FileUploadModules, TransectionStatus };
+
+const ReportModules={
+  ORDER:"Order",
+  PRODUCT:"Product"
+}
+module.exports = { Roles, FileUploadModules, TransectionStatus,ReportModules };
+
