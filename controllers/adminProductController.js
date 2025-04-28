@@ -43,7 +43,7 @@ const { Roles } = require("../utills/enum");
 
 const getProducts = async (req, res) => {
   try {
-    const { q, page, per_page, type, category } = req.query;
+    const { q, page, per_page, type, categoryId } = req.query;
     const options = { limit: per_page ?? 12, skip: 0 };
     const userId = req.user._id;
     const aggregation = [];
@@ -60,7 +60,7 @@ const getProducts = async (req, res) => {
         $match: {
           $or: [
             { name: { $regex: q, $options: "i" } },
-            { category: { $regex: q, $options: "i" } },
+            // { category: { $regex: q, $options: "i" } },
             { design: { $regex: q, $options: "i" } },
             { brand: { $regex: q, $options: "i" } },
           ],
@@ -76,10 +76,10 @@ const getProducts = async (req, res) => {
       });
     }
 
-    if (category && category?.length) {
+    if (categoryId && categoryId?.length) {
       aggregation.push({
         $match: {
-          category: { $in: category },
+          categoryId: { $in: categoryId },
         },
       });
     }

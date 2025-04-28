@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const ProductModel = require("../models/productModel");
 const { productValidator } = require("../validators/productValidator");
 
@@ -135,7 +136,6 @@ async function getall(req, res) {
     const perPageNumber = parseInt(per_page) || 12;
 
     const aggregation = [];
-
     if (q) {
       aggregation.push({
         $match: {
@@ -154,14 +154,26 @@ async function getall(req, res) {
       });
     }
 
-    if (categoryId && categoryId.length) {
-      const categoryIdFilter = Array.isArray(categoryId) ? categoryId : [categoryId];
+    // if (categoryId && categoryId.length) {
+    //   const categoryIdFilter = Array.isArray(categoryId) ? categoryId : [categoryId];
+    //   aggregation.push({
+    //     $match: {
+    //       categoryId: { $in: categoryIdFilter },
+    //     },
+    //   });
+    // }
+
+    if (categoryId) {
+      const categoryIdArray = Array.isArray(categoryId) ? categoryId : [categoryId];    
+      const categoryIdFilter = categoryIdArray.map(id => mongoose.Types.ObjectId.createFromHexString(id));
       aggregation.push({
         $match: {
           categoryId: { $in: categoryIdFilter },
         },
       });
     }
+
+
     aggregation.push(
       {
         $lookup: {

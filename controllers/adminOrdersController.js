@@ -23,10 +23,30 @@ const getAllOrders = async (req, res) => {
       {
         $lookup: {
           from: "products",
-          localField: "items.productId",
-          foreignField: "_id",
-          as: "product",
-        },
+          let: { productId: "$items.productId" },  
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: ["$_id", "$$productId"] } 
+              }
+            },
+            {
+              $lookup: {
+                from: "categorys", 
+                localField: "categoryId",
+                foreignField: "_id",
+                as: "category"
+              }
+            },
+            {
+              $unwind: {
+                path: "$category",
+                preserveNullAndEmptyArrays: true
+              }
+            }
+          ],
+          as: "product"
+        }
       },
       { $unwind: "$product" },
       {
@@ -80,7 +100,14 @@ const getOne = async (req, res) => {
     const getOne = await orderModel
       .findById(orderId)
       .populate("userId")
-      .populate("items.productId");
+      .populate("items.productId")
+      .populate("addressId")
+      .populate({
+        path: "items.productId",
+        populate: {
+          path: "categoryId"
+        }
+      });
 
     if (!getOne) return res.status(404).json({ msg: "Order not found" });
 
