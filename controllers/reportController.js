@@ -48,7 +48,18 @@ const getOrderReports = async (startDate, endDate) => {
 
   return await OrderModel.aggregate(aggregation).exec();
 };
-const getProductReports = async () => {
+const getProductReports = async (startDate, endDate) => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  end.setHours(23, 59, 59, 999);
+
+  if (startDate && endDate) {
+    aggregation.push({
+      $match: {
+        createdAt: { $gte: start, $lte: end },
+      },
+    });
+  }
   const aggregation = [
     {
       $unwind: "$items",
