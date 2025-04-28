@@ -28,10 +28,10 @@ const Report = async (req, res) => {
 };
 
 const getOrderReports = async (startDate, endDate) => {
-  startDate = new Date(startDate);
-  endDate = new Date(endDate);
   const aggregation = [];
   if (startDate && endDate) {
+    startDate = new Date(startDate);
+    endDate = new Date(endDate);
     endDate.setUTCHours(23, 59, 59, 999);
     // start = start.toISOString();
     // end = end.toISOString();

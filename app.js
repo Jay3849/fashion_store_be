@@ -47,14 +47,15 @@ app.use("/api", fileUploader({ useTempFiles: true }), [
   orderRouter,
   FileUploadRoute,
   TransectionRouter,
-  reportRouter,
-  addressRouter
+
+  addressRouter,
 ]);
 app.use("/api/admin", authMiddleware, isAdmin, [
   AdminRouter,
   adminCategoryRouter,
+  reportRouter,
 ]);
-app.get('/',index)
+app.get("/", index);
 app.listen(3000, async () => {
   console.log(`server running on http://localhost:3000`);
   await dbConnection();
