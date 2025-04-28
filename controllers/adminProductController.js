@@ -7,6 +7,7 @@ const {  validateProductdata } = require("../validators/adminValidator");
 const jwt = require("jsonwebtoken");
 
 const { Roles } = require("../utills/enum");
+const { default: mongoose } = require("mongoose");
 
 // async function getProducts(req, res, q) {
 //   try {
@@ -76,13 +77,22 @@ const getProducts = async (req, res) => {
       });
     }
 
-    if (categoryId && categoryId?.length) {
-      aggregation.push({
-        $match: {
-          categoryId: { $in: categoryId },
-        },
-      });
-    }
+    // if (categoryId && categoryId?.length) {
+    //   aggregation.push({
+    //     $match: {
+    //       categoryId: { $in: categoryId },
+    //     },
+    //   });
+    // }
+    if (categoryId) {
+          const categoryIdArray = Array.isArray(categoryId) ? categoryId : [categoryId];    
+          const categoryIdFilter = categoryIdArray.map(id => mongoose.Types.ObjectId.createFromHexString(id));
+          aggregation.push({
+            $match: {
+              categoryId: { $in: categoryIdFilter },
+            },
+          });
+        }
 
 
     aggregation.push(
