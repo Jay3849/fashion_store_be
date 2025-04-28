@@ -7,14 +7,16 @@ const OrderModel = require("../models/orderModel");
 const Report = async (req, res) => {
   try {
     const { module } = req.params;
+    const { startDate, endDate } = req.query;
 
     let response = {};
     switch (module) {
       case ReportModules.ORDER:
-        response = await getOrderReports();
+        response = await getOrderReports(startDate, endDate);
         break;
       case ReportModules.PRODUCT:
-        response = await getProductReports();
+        response = await getProductReports(startDate, endDate);
+
         break;
       default:
         throw Error("Module not found");
@@ -26,14 +28,20 @@ const Report = async (req, res) => {
 };
 
 const getOrderReports = async (startDate, endDate) => {
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-  end.setHours(23, 59, 59, 999);
+  startDate = new Date(startDate);
+  endDate = new Date(endDate);
   const aggregation = [];
   if (startDate && endDate) {
+    endDate.setUTCHours(23, 59, 59, 999);
+    // start = start.toISOString();
+    // end = end.toISOString();
+    console.log(startDate, endDate);
     aggregation.push({
       $match: {
-        createdAt: { $gte: start, $lte: end },
+        createdAt: {
+          $gte: startDate,
+          $lte: endDate,
+        },
       },
     });
   }
@@ -48,10 +56,69 @@ const getOrderReports = async (startDate, endDate) => {
 
   return await OrderModel.aggregate(aggregation).exec();
 };
+// const getProductReports = async (startDate, endDate) => {
+//   const start = new Date(startDate);
+//   const end = new Date(endDate);
+//   end.setHours(23, 59, 59, 999);
+
+//   if (startDate && endDate) {
+//     aggregation.push({
+//       $match: {
+//         createdAt: { $gte: start, $lte: end },
+//       },
+//     });
+//   }
+
+//   const aggregation = [
+//     {
+//       $unwind: "$items",
+//     },
+//     {
+//       $group: {
+//         _id: "$items.productId",
+//         totalQuantity: { $sum: "$items.quantity" },
+//       },
+//     },
+//     {
+//       $lookup: {
+//         from: "products",
+//         localField: "_id",
+//         foreignField: "_id",
+//         as: "productDetails",
+//       },
+//     },
+//     {
+//       $unwind: "$productDetails",
+//     },
+//     {
+//       $project: {
+//         _id: 0,
+//         productId: "$_id",
+//         productName: "$productDetails.name",
+//         totalQuantity: 1,
+//       },
+//     },
+
+//     {
+//       $match: {
+//         totalQuantity: { $gt: 0 },
+//       },
+//     },
+//     {
+//       $sort: {
+//         totalQuantity: -1,
+//       },
+//     },
+//   ];
+//   return await OrderModel.aggregate(aggregation).exec();
+// };
+
 const getProductReports = async (startDate, endDate) => {
   const start = new Date(startDate);
   const end = new Date(endDate);
   end.setHours(23, 59, 59, 999);
+
+  const aggregation = [];
 
   if (startDate && endDate) {
     aggregation.push({
@@ -60,7 +127,8 @@ const getProductReports = async (startDate, endDate) => {
       },
     });
   }
-  const aggregation = [
+
+  aggregation.push(
     {
       $unwind: "$items",
     },
@@ -89,7 +157,6 @@ const getProductReports = async (startDate, endDate) => {
         totalQuantity: 1,
       },
     },
-
     {
       $match: {
         totalQuantity: { $gt: 0 },
@@ -99,8 +166,9 @@ const getProductReports = async (startDate, endDate) => {
       $sort: {
         totalQuantity: -1,
       },
-    },
-  ];
+    }
+  );
+
   return await OrderModel.aggregate(aggregation).exec();
 };
 
