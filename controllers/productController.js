@@ -130,7 +130,7 @@ async function getOne(req, res) {
 // }
 async function getall(req, res) {
   try {
-    const { page, per_page, category, type, q } = req.query;
+    const { page, per_page, categoryId, type, q } = req.query;
     const pageNumber = parseInt(page) || 1;
     const perPageNumber = parseInt(per_page) || 12;
 
@@ -141,7 +141,6 @@ async function getall(req, res) {
         $match: {
           $or: [
             { name: { $regex: q, $options: "i" } },
-            { category: { $regex: q, $options: "i" } },
             { design: { $regex: q, $options: "i" } },
             { brand: { $regex: q, $options: "i" } },
           ],
@@ -155,14 +154,14 @@ async function getall(req, res) {
       });
     }
 
-    // if (category && category.length) {
-    //   const categoryFilter = Array.isArray(category) ? category : [category];
-    //   aggregation.push({
-    //     $match: {
-    //       category: { $in: categoryFilter },
-    //     },
-    //   });
-    // }
+    if (categoryId && categoryId.length) {
+      const categoryIdFilter = Array.isArray(categoryId) ? categoryId : [categoryId];
+      aggregation.push({
+        $match: {
+          categoryId: { $in: categoryIdFilter },
+        },
+      });
+    }
     aggregation.push(
       {
         $lookup: {

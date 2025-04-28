@@ -109,7 +109,15 @@ const getAll = async (req, res) => {
     const getAll = await OrderModel.find({ userId })
      .sort({ createdAt: -1 })
       .populate("userId")
-      .populate("items.productId");
+      .populate("addressId")
+      .populate('addressId')
+      .populate("items.productId")
+      .populate({
+        path: "items.productId",
+        populate: {
+          path: "categoryId"
+        }
+      })
 
     if (!getAll) return res.status(404).json({ msg: "Order not found" });
 
