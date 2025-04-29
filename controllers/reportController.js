@@ -17,6 +17,8 @@ const Report = async (req, res) => {
       case ReportModules.PRODUCT:
         response = await getProductReports(startDate, endDate);
 
+      case ReportModules.TOTALREVENUE:
+        response = await TotalRevenue(startDate, endDate);
         break;
       default:
         throw Error("Module not found");
@@ -154,6 +156,8 @@ const getProductReports = async (startDate, endDate) => {
         _id: 0,
         productId: "$_id",
         productName: "$productDetails.name",
+        productImage: "$productDetails.image",
+
         totalQuantity: 1,
       },
     },
@@ -168,6 +172,38 @@ const getProductReports = async (startDate, endDate) => {
       },
     }
   );
+
+  return await OrderModel.aggregate(aggregation).exec();
+};
+
+const TotalRevenue = async (startDate, endDate) => {
+  const matchStage = {
+    razorpay_payment_id: { $exists: true, $ne: null },
+  };
+
+  if (startDate && endDate) {
+    startDate = new Date(startDate);
+    endDate = new Date(endDate);
+    endDate.setUTCHours(23, 59, 59, 999);
+
+    matchStage.createdAt = {
+      $gte: startDate,
+      $lte: endDate,
+    };
+  }
+
+  const aggregation = [
+    {
+      $match: matchStage,
+    },
+    {
+      $group: {
+        _id: null,
+        totalRevenue: { $sum: "$totalAmount" },
+        totalPaidOrders: { $sum: 1 },
+      },
+    },
+  ];
 
   return await OrderModel.aggregate(aggregation).exec();
 };

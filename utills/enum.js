@@ -13,9 +13,9 @@ const TransectionStatus = {
   SUCCESS: "Success",
 };
 
-const ReportModules={
-  ORDER:"Order",
-  PRODUCT:"Product"
-}
-module.exports = { Roles, FileUploadModules, TransectionStatus,ReportModules };
-
+const ReportModules = {
+  ORDER: "Order",
+  PRODUCT: "Product",
+  TOTALREVENUE: "TotalRevenue",
+};
+module.exports = { Roles, FileUploadModules, TransectionStatus, ReportModules };
