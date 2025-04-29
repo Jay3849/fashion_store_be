@@ -56,7 +56,8 @@ const getOrderReports = async (startDate, endDate) => {
     },
   });
 
-  return await OrderModel.aggregate(aggregation).exec();
+  const result = await OrderModel.aggregate(aggregation).exec();
+  return result?.length ? result[0] : null;
 };
 // const getProductReports = async (startDate, endDate) => {
 //   const start = new Date(startDate);
@@ -173,22 +174,23 @@ const getProductReports = async (startDate, endDate) => {
     }
   );
 
-  return await OrderModel.aggregate(aggregation).exec();
+  const result = await OrderModel.aggregate(aggregation).exec();
+  return result?.length ? result[0] : null;
 };
 
 const TotalRevenue = async (startDate, endDate) => {
+  const matchStage = {
+    razorpay_payment_id: { $exists: true, $ne: null },
+  };
   if (startDate && endDate) {
     startDate = new Date(startDate);
     endDate = new Date(endDate);
     endDate.setUTCHours(23, 59, 59, 999);
+    matchStage.createdAt = {
+      $gte: startDate,
+      $lte: endDate,
+    };
   }
-  const matchStage = {
-    razorpay_payment_id: { $exists: true, $ne: null },
-  };
-  matchStage.createdAt = {
-    $gte: startDate,
-    $lte: endDate,
-  };
 
   const aggregation = [
     {
@@ -203,7 +205,8 @@ const TotalRevenue = async (startDate, endDate) => {
     },
   ];
 
-  return await OrderModel.aggregate(aggregation).exec();
+  let result = await OrderModel.aggregate(aggregation).exec();
+  return result?.length ? result[0] : null;
 };
 
 module.exports = {
