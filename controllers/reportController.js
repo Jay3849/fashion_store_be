@@ -16,7 +16,7 @@ const Report = async (req, res) => {
         break;
       case ReportModules.PRODUCT:
         response = await getProductReports(startDate, endDate);
-
+        break;
       case ReportModules.TOTALREVENUE:
         response = await TotalRevenue(startDate, endDate);
         break;
@@ -25,6 +25,7 @@ const Report = async (req, res) => {
     }
     res.status(200).json(response);
   } catch (error) {
+    console.log(error);
     res.status(400).json({ msg: error?.message || "orders not available" });
   }
 };
@@ -138,6 +139,7 @@ const getProductReports = async (startDate, endDate) => {
     {
       $group: {
         _id: "$items.productId",
+        totalAmount: { $sum: "$totalAmount" },
         totalQuantity: { $sum: "$items.quantity" },
       },
     },
@@ -153,15 +155,29 @@ const getProductReports = async (startDate, endDate) => {
       $unwind: "$productDetails",
     },
     {
+      $lookup: {
+        from: "categorys",
+        localField: "productDetails.categoryId",
+        foreignField: "_id",
+        as: "category",
+      },
+    },
+    {
+      $unwind: "$category",
+    },
+    {
       $project: {
-        _id: 0,
-        productId: "$_id",
-        productName: "$productDetails.name",
-        productImage: "$productDetails.image",
-
+        _id: "$_id",
+        name: "$productDetails.name",
+        design: "$productDetails.design",
+        image: "$productDetails.image",
+        price: "$productDetails.price",
+        totalAmount: "$totalAmount",
+        category: "$category",
         totalQuantity: 1,
       },
     },
+
     {
       $match: {
         totalQuantity: { $gt: 0 },
@@ -174,8 +190,7 @@ const getProductReports = async (startDate, endDate) => {
     }
   );
 
-  const result = await OrderModel.aggregate(aggregation).exec();
-  return result?.length ? result[0] : null;
+  return await OrderModel.aggregate(aggregation).exec();
 };
 
 const TotalRevenue = async (startDate, endDate) => {
