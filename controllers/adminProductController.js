@@ -108,6 +108,9 @@ const getProducts = async (req, res) => {
         $unwind: "$category" 
       },
     )
+    aggregation.push({
+      $sort: { createdAt: -1 },
+    });
 
     aggregation.push(
       {
@@ -119,11 +122,7 @@ const getProducts = async (req, res) => {
     );
     aggregation;
     const products = await ProductModel.aggregate(aggregation).exec([
-      {$sort:{
-         createdAt: -1 
-        
-
-      }}
+      
     ]);
 
     if (!products) {
