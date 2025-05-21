@@ -17,28 +17,13 @@ const { index } = require("./controllers/testController");
 const addressRouter = require("./routes/addressRoute");
 
 const app = express();
+const PORT = process.env.PORT || 3000;
+
 require("dotenv").config();
 
 app.use(express.json());
 app.use(cors({origin:'*'}));
-// app.use((req, res, next) => {
-//   const qs = req.query;
-//   console.log(Object.keys(qs), req.query);
-//   req.query = Object.keys(qs).reduce((acc, qsKey) => {
-//     let formatStr = qs[qsKey].replace(/\[|\]/g, "");
-//     if (formatStr) {
-//       formatStr = formatStr.replace(/^\[|\]$/g, "");
 
-//       acc[qsKey] = formatStr.includes(",")
-//         ? formatStr.split(",")
-//         : qs[qsKey].startsWith("[")
-//         ? [formatStr]
-//         : formatStr;
-//     }
-//     return acc;
-//   }, {});
-//   next();
-// });
 app.use("/api", fileUploader({ useTempFiles: true }), [
   loginrouter,
   productRoute,
@@ -56,7 +41,9 @@ app.use("/api/admin", authMiddleware, isAdmin, [
   reportRouter,
 ]);
 app.get("/", index);
-app.listen(3000, async () => {
-  console.log(`server running on http://localhost:3000`);
+
+app.listen(PORT, '0.0.0.0', async () => {
+  console.log(`server running on http://localhost:${PORT}`);
   await dbConnection();
 });
+
